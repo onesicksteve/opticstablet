@@ -1,75 +1,39 @@
-// js/browse.js
+// js/product.js
 (() => {
   const STORAGE_COMPARE = "rspb_compare_ids";
   const STORAGE_REWARDS = "rspb_rewards_show";
 
-  // Rewards rules
   const POINTS_PER_POUND_NORMAL = 2;
   const POINTS_PER_POUND_DOUBLE = 4;
   const POINTS_TO_POUNDS = 0.01; // 100 points = £1
 
-  const els = {
-    pageTitle: document.getElementById("pageTitle"),
-    rewardsToggle: document.getElementById("rewardsToggle"),
-    searchInput: document.getElementById("searchInput"),
-    itemCount: document.getElementById("itemCount"),
-    compareCount: document.getElementById("compareCount"),
-    grid: document.getElementById("grid"),
-  };
-
-  // Fail fast if the page is missing required IDs
-  if (!els.grid || !els.searchInput || !els.itemCount) {
-    console.error("browse.html is missing required elements (grid/searchInput/itemCount).");
-    return;
-  }
+  const productEl = document.getElementById("product");
+  const compareCountEl = document.getElementById("compareCount");
 
   function getParam(name) {
-    const u = new URL(window.location.href);
-    return u.searchParams.get(name) || "";
-  }
-
-  function titleCase(s) {
-    return (s || "")
-      .replace(/-/g, " ")
-      .trim()
-      .replace(/\b\w/g, (c) => c.toUpperCase());
-  }
-
-  function slug(s) {
-    return (s || "")
-      .toString()
-      .trim()
-      .toLowerCase()
-      .replace(/&/g, "and")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+    return new URL(window.location.href).searchParams.get(name) || "";
   }
 
   function formatGBP(n) {
     const num = Number(n);
     if (!Number.isFinite(num)) return "";
-    try {
-      return new Intl.NumberFormat("en-GB", {
-        style: "currency",
-        currency: "GBP",
-      }).format(num);
-    } catch {
-      return "£" + num.toFixed(2);
-    }
+    return new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    }).format(num);
   }
 
   function safeImgSrc(src) {
-    // products.json uses "Images/..." with spaces — encode spaces safely
-    if (!src) return "";
-    return encodeURI(src);
+    return src ? encodeURI(src) : "";
   }
 
-  function placeholderDataUri(label = "No image") {
+  function placeholder(label = "No image") {
     const svg = `
       <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
         <rect width="100%" height="100%" fill="rgba(0,0,0,0.25)"/>
         <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-              fill="rgba(255,255,255,0.7)" font-family="system-ui,Segoe UI,Arial" font-size="36">
+          fill="rgba(255,255,255,0.7)" font-size="36"
+          font-family="system-ui,Segoe UI,Arial">
           ${label}
         </text>
       </svg>`;
@@ -78,23 +42,20 @@
 
   function getCompareIds() {
     try {
-      const raw = localStorage.getItem(STORAGE_COMPARE);
-      const arr = raw ? JSON.parse(raw) : [];
-      if (!Array.isArray(arr)) return [];
-      // normalize to strings
-      return arr.map(String);
+      return JSON.parse(localStorage.getItem(STORAGE_COMPARE)) || [];
     } catch {
       return [];
     }
   }
 
   function setCompareIds(ids) {
-    localStorage.setItem(STORAGE_COMPARE, JSON.stringify(ids.map(String)));
+    localStorage.setItem(STORAGE_COMPARE, JSON.stringify(ids));
   }
 
   function updateCompareCount() {
-    if (!els.compareCount) return;
-    els.compareCount.textContent = String(getCompareIds().length);
+    if (compareCountEl) {
+      compareCountEl.textContent = String(getCompareIds().length);
+    }
   }
 
   function getRewardsShown() {
@@ -105,10 +66,10 @@
     localStorage.setItem(STORAGE_REWARDS, v ? "true" : "false");
   }
 
-  function calcRewards(priceGbp) {
-    const price = Number(priceGbp) || 0;
-    const normalPoints = Math.round(price * POINTS_PER_POUND_NORMAL);
-    const doublePoints = Math.round(price * POINTS_PER_POUND_DOUBLE);
+  function calcRewards(price) {
+    const p = Number(price) || 0;
+    const normalPoints = Math.round(p * POINTS_PER_POUND_NORMAL);
+    const doublePoints = Math.round(p * POINTS_PER_POUND_DOUBLE);
     return {
       normalPoints,
       normalValue: normalPoints * POINTS_TO_POUNDS,
@@ -117,174 +78,144 @@
     };
   }
 
-  // Determine category from URL (supports both legacy cat= and current category=)
-  const categoryRaw = getParam("category") || getParam("cat") || "binoculars";
-  const categoryKey = slug(categoryRaw);
-
-  if (els.pageTitle) {
-    els.pageTitle.textContent = `Browse ${titleCase(categoryRaw)}`;
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   }
 
-  let allProducts = [];
-
-  function matchesCategory(p) {
-    return slug(p.category) === categoryKey;
+  function specRows(specs) {
+    if (!specs || typeof specs !== "object") return [];
+    return Object.entries(specs)
+      .filter(([_, v]) => v !== null && v !== "")
+      .map(([k, v]) => ({ k, v }));
   }
 
-  function matchesQuery(p, q) {
-    if (!q) return true;
-    const hay = [
-      p.name,
-      p.brand,
-      p.model,
-      p.magnification,
-      p.objective_diameter_mm,
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-
-    return hay.includes(q);
-  }
-
-  function bestForChips(bestFor) {
-    const arr = Array.isArray(bestFor) ? bestFor : [];
-    if (!arr.length) return "";
+  function renderSpecs(rows) {
+    if (!rows.length) return `<div class="muted">No specifications listed.</div>`;
     return `
-      <div class="chips">
-        ${arr.slice(0, 3).map(t => `<span class="chip">${t}</span>`).join("")}
+      <div class="specs">
+        ${rows.map(r => `
+          <div class="spec-row">
+            <div class="spec-k">${escapeHtml(r.k)}</div>
+            <div class="spec-v">${escapeHtml(r.v)}</div>
+          </div>
+        `).join("")}
       </div>
     `;
   }
 
-  function buildCard(p, rewardsShown) {
+  function render(product) {
+    const id = String(product.id);
+    const name = product.name || `${product.brand} ${product.model}`;
+    const img = safeImgSrc(product.image) || placeholder();
+    const price = formatGBP(product.price_gbp);
+
     const compareIds = getCompareIds();
-    const pid = String(p.id);
-    const checked = compareIds.includes(pid);
+    const inCompare = compareIds.includes(id);
 
-    const img = safeImgSrc(p.image) || placeholderDataUri("No image");
-    const name = p.name || `${p.brand || ""} ${p.model || ""}`.trim();
-    const price = formatGBP(p.price_gbp);
+    const rewards = calcRewards(product.price_gbp);
+    const rewardsShown = getRewardsShown();
 
-    const valueLine = p.value_for_money ? `<div class="subline">${p.value_for_money}</div>` : "";
-    const weightLine = p.weight_g ? `<div class="meta"><span>Weight</span><span>${p.weight_g} g</span></div>` : "";
-    const warrantyLine = p.warranty ? `<div class="meta"><span>Warranty</span><span>${p.warranty}</span></div>` : "";
-
-    const rewards = calcRewards(p.price_gbp);
-    const rewardsBlock = rewardsShown
-      ? `
-        <div class="rewards">
-          <div><strong>Normal:</strong> ${rewards.normalPoints} pts (${formatGBP(rewards.normalValue)})</div>
-          <div><strong>Optics weekend:</strong> ${rewards.doublePoints} pts (${formatGBP(rewards.doubleValue)})</div>
-        </div>
-      `
-      : "";
-
-    const missingImg = placeholderDataUri("Image missing");
-
-    return `
-      <article class="card">
-        <div class="card-image">
-          <img
-            src="${img}"
-            alt="${name.replace(/"/g, "&quot;")}"
-            loading="lazy"
-            onerror="this.onerror=null;this.src='${missingImg}';"
-          />
+    productEl.innerHTML = `
+      <div class="product-hero">
+        <div class="product-img">
+          <img src="${img}" alt="${escapeHtml(name)}"
+               onerror="this.src='${placeholder("Image missing")}'">
         </div>
 
-        <div class="card-body">
-          <h3 class="card-title">${name}</h3>
-          <div class="price">${price}</div>
-          ${valueLine}
+        <div class="product-head">
+          <h1 class="product-title">${escapeHtml(name)}</h1>
+          ${price ? `<div class="product-price">${price}</div>` : ""}
 
-          ${bestForChips(p.best_for)}
-
-          <div class="meta-grid">
-            ${warrantyLine}
-            ${weightLine}
-          </div>
-
-          ${rewardsBlock}
-
-          <div class="card-actions">
-            <a class="btn" href="product.html?id=${encodeURIComponent(pid)}">View details</a>
-
+          <div class="product-controls">
             <label class="compare-toggle">
-              <input type="checkbox" data-compare-id="${pid}" ${checked ? "checked" : ""}>
+              <input type="checkbox" id="compareToggle" ${inCompare ? "checked" : ""}>
               <span>Add to compare</span>
             </label>
+
+            <label class="toggle">
+              <input type="checkbox" id="rewardsToggle" ${rewardsShown ? "checked" : ""}>
+              <span>Show rewards value</span>
+            </label>
+          </div>
+
+          <div id="rewardsBlock" class="rewards"
+               style="display:${rewardsShown ? "block" : "none"}">
+            <div><strong>Normal:</strong> ${rewards.normalPoints} pts (${formatGBP(rewards.normalValue)})</div>
+            <div><strong>Optics weekend:</strong> ${rewards.doublePoints} pts (${formatGBP(rewards.doubleValue)})</div>
           </div>
         </div>
-      </article>
+      </div>
+
+      <!-- DESCRIPTION -->
+      ${product.description ? `
+        <div class="section">
+          <h3>Description</h3>
+          <p class="desc">${escapeHtml(product.description)}</p>
+        </div>
+      ` : ""}
+
+      <!-- KEY FEATURES -->
+      ${Array.isArray(product.key_features) && product.key_features.length ? `
+        <div class="section">
+          <h3>Key features</h3>
+          <ul class="bullets">
+            ${product.key_features.map(f => `<li>${escapeHtml(f)}</li>`).join("")}
+          </ul>
+        </div>
+      ` : ""}
+
+      <!-- SPECIFICATIONS -->
+      <div class="section">
+        <h3>Specifications</h3>
+        ${renderSpecs(specRows(product.specs))}
+      </div>
     `;
-  }
 
-  function wireCompareToggles() {
-    document.querySelectorAll('input[type="checkbox"][data-compare-id]').forEach(cb => {
-      cb.addEventListener("change", (e) => {
-        const id = String(e.target.getAttribute("data-compare-id"));
-        const ids = getCompareIds();
-
-        if (e.target.checked) {
-          if (!ids.includes(id)) ids.push(id);
-        } else {
-          const idx = ids.indexOf(id);
-          if (idx >= 0) ids.splice(idx, 1);
-        }
-
-        setCompareIds(ids);
-        updateCompareCount();
-      });
+    // Compare toggle
+    document.getElementById("compareToggle")?.addEventListener("change", e => {
+      const ids = getCompareIds();
+      if (e.target.checked && !ids.includes(id)) ids.push(id);
+      if (!e.target.checked && ids.includes(id)) ids.splice(ids.indexOf(id), 1);
+      setCompareIds(ids);
+      updateCompareCount();
     });
-  }
 
-  function render() {
-    const q = (els.searchInput.value || "").trim().toLowerCase();
-    const rewardsShown = !!els.rewardsToggle?.checked;
+    // Rewards toggle
+    document.getElementById("rewardsToggle")?.addEventListener("change", e => {
+      setRewardsShown(e.target.checked);
+      document.getElementById("rewardsBlock").style.display =
+        e.target.checked ? "block" : "none";
+    });
 
-    const filtered = allProducts
-      .filter(matchesCategory)
-      .filter(p => matchesQuery(p, q));
-
-    els.itemCount.textContent = String(filtered.length);
-
-    els.grid.innerHTML = filtered.map(p => buildCard(p, rewardsShown)).join("");
-    wireCompareToggles();
     updateCompareCount();
   }
 
   async function init() {
-    // Restore toggle state
-    if (els.rewardsToggle) {
-      els.rewardsToggle.checked = getRewardsShown();
-      els.rewardsToggle.addEventListener("change", () => {
-        setRewardsShown(els.rewardsToggle.checked);
-        render();
-      });
+    if (!productEl) return;
+
+    const id = getParam("id");
+    if (!id) {
+      productEl.innerHTML = `<div class="card error">Missing product ID</div>`;
+      return;
     }
-
-    els.searchInput.addEventListener("input", () => render());
-
-    updateCompareCount();
 
     try {
       const res = await fetch("data/products.json", { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to load data/products.json");
       const data = await res.json();
+      const product = data.find(p => String(p.id) === String(id));
 
-      if (!Array.isArray(data)) throw new Error("products.json is not an array");
-      allProducts = data;
+      if (!product) {
+        productEl.innerHTML = `<div class="card error">Product not found</div>`;
+        return;
+      }
 
-      render();
-    } catch (err) {
-      console.error(err);
-      els.grid.innerHTML = `
-        <div class="card error">
-          <h3>Could not load products</h3>
-          <p>Check that <code>data/products.json</code> exists and is valid JSON.</p>
-        </div>
-      `;
+      render(product);
+    } catch {
+      productEl.innerHTML = `<div class="card error">Could not load product data</div>`;
     }
   }
 
