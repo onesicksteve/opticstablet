@@ -4,41 +4,30 @@
   const MAX_COMPARE = 2;
   const DATA_URL = "data/products.json";
 
-  // Optional: clear compare when leaving compare screen (you asked for this)
+  // you asked for this: clear compare when you leave compare screen
   const CLEAR_ON_LEAVE = true;
 
-  // Optional: inactivity timeout back to home (minutes)
+  // optional inactivity timeout back to home (minutes)
   const IDLE_MINUTES = 5;
 
   const els = {
-    container:
-      document.getElementById("compareContainer") ||
+    pageTitle: document.getElementById("pageTitle"),
+    compareCount: document.getElementById("compareCount"),
+    wrap:
+      document.getElementById("compareTable") ||
       document.getElementById("compare") ||
       document.getElementById("content") ||
       document.body,
-
-    tableWrap:
-      document.getElementById("compareTable") ||
-      document.getElementById("table") ||
-      document.getElementById("compareTableWrap") ||
-      document.getElementById("compareGrid") ||
-      null,
-
-    title: document.getElementById("pageTitle") || document.getElementById("title"),
-    backBtn: document.getElementById("backBtn"),
-    clearBtn: document.getElementById("clearCompare"),
   };
 
-  // If you have a dedicated element, use it. Otherwise we will inject our own table.
-  if (!els.tableWrap) {
-    els.tableWrap = document.createElement("div");
-    els.tableWrap.id = "compareTable";
-    els.container.appendChild(els.tableWrap);
+  // Ensure we have somewhere to render
+  let tableHost = document.getElementById("compareTable");
+  if (!tableHost) {
+    tableHost = document.createElement("div");
+    tableHost.id = "compareTable";
+    els.wrap.appendChild(tableHost);
   }
 
-  // -----------------------------
-  // Utilities
-  // -----------------------------
   function safeText(s) {
     return String(s ?? "").trim();
   }
@@ -49,12 +38,6 @@
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
-  }
-
-  function formatMaybeNumber(s) {
-    const v = safeText(s);
-    const n = Number(v);
-    return Number.isFinite(n) ? String(n) : v;
   }
 
   function titleCase(s) {
@@ -84,8 +67,9 @@
     setCompareIds([]);
   }
 
-  function placeholderCell(text = "—") {
-    return `<span class="muted">${encodeHtml(text)}</span>`;
+  function updateCompareCount() {
+    if (!els.compareCount) return;
+    els.compareCount.textContent = String(getCompareIds().length);
   }
 
   // -----------------------------
@@ -94,41 +78,27 @@
   function normaliseKey(rawKey) {
     const k = safeText(rawKey).toLowerCase();
 
-    // Close focus variants
     if (k.includes("close focus")) return "close focus";
-
-    // Dimensions variants
     if (k.includes("dimension")) return "dimensions";
 
-    // Nitrogen filled variants
-    if (k.replace(/-/g, " ").includes("nitrogen filled")) return "nitrogen filled";
-    if (k.replace(/-/g, " ").includes("nitrogen-filled")) return "nitrogen filled";
+    const k2 = k.replace(/-/g, " ");
+    if (k2.includes("nitrogen filled")) return "nitrogen filled";
 
-    // Weight
-    if (k === "weight" || k.includes("weight")) return "weight";
-
-    // Warranty
+    if (k.includes("weight")) return "weight";
     if (k.includes("warranty")) return "warranty";
 
-    // Magnification + objective
     if (k === "magnification") return "magnification";
     if (k.includes("objective") && k.includes("mm")) return "objective (mm)";
     if (k.includes("objective lens")) return "objective (mm)";
-    if (k.includes("objective") && !k.includes("mm")) return "objective (mm)";
 
-    // Eye relief / exit pupil / FOV
     if (k.includes("eye relief")) return "eye relief (mm)";
     if (k.includes("exit pupil")) return "exit pupil (mm)";
     if (k.includes("field of view") && k.includes("1000")) return "field of view (m/1000m)";
     if (k.includes("field of view") && k.includes("degree")) return "field of view (degrees)";
 
-    // ED lens
-    if (k === "ed lens" || k.includes("ed lens")) return "ed lens";
-
-    // Waterproof
+    if (k.includes("ed lens")) return "ed lens";
     if (k.includes("waterproof")) return "waterproof";
 
-    // Default: keep original but tidy
     return safeText(rawKey).toLowerCase();
   }
 
@@ -151,33 +121,29 @@
       case "nitrogen filled":
         return "Nitrogen filled";
       default:
-        // If already nice-ish, title case it
         return titleCase(key);
     }
   }
 
   // -----------------------------
-  // Value normalisation (your required dimensions style)
+  // Value normalisation
   // -----------------------------
   function normaliseValueForKey(key, value) {
     const v = safeText(value);
     if (!v) return "";
 
-    // Close focus -> always "X m"
+    // Close focus -> "X m"
     if (key === "close focus") {
       let s = v.replace(/\s+/g, " ").trim();
       s = s.replace(/m\b/i, "").trim();
       const n = Number(s);
       if (Number.isFinite(n)) return `${n} m`;
-
-      // If it contains a number somewhere, use it
       const m = s.match(/(\d+(\.\d+)?)/);
-      if (m) return `${m[1]} m`;
-
-      return v;
+      return m ? `${m[1]} m` : v;
     }
 
-    // Dimensions -> always "L125 x W120 x H50" (with — if missing)
+    // Dimensions -> ALWAYS "L125 x W120 x H50"
+    // If we only have 2 numbers, H becomes "—" (we cannot invent H)
     if (key === "dimensions") {
       let s = v
         .replace(/×/g, "x")
@@ -185,21 +151,20 @@
         .replace(/\s+/g, " ")
         .trim();
 
-      // labelled first
+      // Try labelled L/W/H first
       let L = (s.match(/\bL\s*(\d+(\.\d+)?)/i) || [])[1];
       let W = (s.match(/\bW\s*(\d+(\.\d+)?)/i) || [])[1];
       let H = (s.match(/\bH\s*(\d+(\.\d+)?)/i) || [])[1];
 
-      // fallback to plain numbers in order
-      const nums =
-        s
-          .replace(/\b[DLWH]\b/gi, "")
-          .match(/(\d+(\.\d+)?)/g)
-          ?.map(Number) || [];
+      // Pull all numbers as fallback
+      const nums = s.match(/(\d+(\.\d+)?)/g) || [];
+      const n0 = nums[0];
+      const n1 = nums[1];
+      const n2 = nums[2];
 
-      if (!L && nums[0]) L = nums[0];
-      if (!W && nums[1]) W = nums[1];
-      if (!H && nums[2]) H = nums[2];
+      if (!L && n0) L = n0;
+      if (!W && n1) W = n1;
+      if (!H && n2) H = n2;
 
       return `L${L ?? "—"} x W${W ?? "—"} x H${H ?? "—"}`;
     }
@@ -210,51 +175,22 @@
       return Number.isFinite(n) ? `${n}x` : v;
     }
 
-    // Nitrogen filled -> Yes/No
-    if (key === "nitrogen filled") {
+    // Yes/No style fields
+    if (key === "nitrogen filled" || key === "ed lens" || key === "waterproof") {
       if (/yes|true|y/i.test(v)) return "Yes";
       if (/no|false|n/i.test(v)) return "No";
       return titleCase(v);
     }
 
-    // ED lens -> Yes/No
-    if (key === "ed lens") {
-      if (/yes|true|y/i.test(v)) return "Yes";
-      if (/no|false|n/i.test(v)) return "No";
-      return titleCase(v);
-    }
-
-    // Waterproof -> Yes/No
-    if (key === "waterproof") {
-      if (/yes|true|y/i.test(v)) return "Yes";
-      if (/no|false|n/i.test(v)) return "No";
-      return titleCase(v);
-    }
-
-    // Weight -> just number (g) if possible
-    if (key === "weight") {
+    // Objective/weight tidy numeric
+    if (key === "objective (mm)" || key === "weight") {
       const m = v.match(/(\d+(\.\d+)?)/);
       return m ? `${m[1]}` : v;
     }
 
-    // Objective -> number if possible
-    if (key === "objective (mm)") {
-      const m = v.match(/(\d+(\.\d+)?)/);
-      return m ? `${m[1]}` : v;
-    }
-
-    // Warranty -> tidy
-    if (key === "warranty") {
-      return v.replace(/\s+/g, " ").trim();
-    }
-
-    // Default
     return v;
   }
 
-  // -----------------------------
-  // Extract specs from a product
-  // -----------------------------
   function productName(p) {
     return (
       safeText(p.name) ||
@@ -267,7 +203,7 @@
   function buildSpecMap(p) {
     const map = new Map();
 
-    // Core fields (always include)
+    // Core fields
     if (p.brand) map.set("brand", safeText(p.brand));
     if (p.model) map.set("model", safeText(p.model));
     if (p.magnification) map.set("magnification", safeText(p.magnification));
@@ -275,8 +211,7 @@
     if (p.weight_g) map.set("weight", safeText(p.weight_g));
     if (p.warranty) map.set("warranty", safeText(p.warranty));
 
-    // If you store specs as an object, pull them in
-    // Supports: p.specs OR p.specifications OR p.specifications_table etc.
+    // Pull specs object (supports multiple possible property names)
     const specsObj =
       p.specs ||
       p.specifications ||
@@ -290,48 +225,52 @@
         const nv = safeText(v);
         if (!nv) return;
 
-        // Keep first if already present, unless the new one looks "more complete"
-        if (!map.has(nk)) {
-          map.set(nk, nv);
-        } else {
+        // merge duplicates: prefer longer value
+        if (!map.has(nk)) map.set(nk, nv);
+        else {
           const existing = safeText(map.get(nk));
-          // Prefer longer / more detailed value
           if (nv.length > existing.length) map.set(nk, nv);
         }
       });
     }
 
-    // If you store specs as an array of {label, value}
+    // Pull specs array (if present)
     const specsArr = p.specs_list || p.specList || p.specifications_list || null;
     if (Array.isArray(specsArr)) {
       specsArr.forEach((row) => {
-        const k = normaliseKey(row?.label || row?.key || "");
-        const v = safeText(row?.value);
-        if (!k || !v) return;
-        if (!map.has(k)) map.set(k, v);
-        else if (v.length > safeText(map.get(k)).length) map.set(k, v);
+        const nk = normaliseKey(row?.label || row?.key || "");
+        const nv = safeText(row?.value);
+        if (!nk || !nv) return;
+
+        if (!map.has(nk)) map.set(nk, nv);
+        else {
+          const existing = safeText(map.get(nk));
+          if (nv.length > existing.length) map.set(nk, nv);
+        }
       });
     }
 
-    // Normalise values after merging
+    // Normalise values at end
     for (const [k, v] of map.entries()) {
       const nk = normaliseKey(k);
-      const nv = normaliseValueForKey(nk, v);
-      map.set(nk, nv);
+      map.set(nk, normaliseValueForKey(nk, v));
     }
 
     return map;
   }
 
-  // -----------------------------
-  // Render table
-  // -----------------------------
+  function placeholderCell(text = "—") {
+    return `<span class="muted">${encodeHtml(text)}</span>`;
+  }
+
   function renderCompare(products) {
     if (!products.length) {
-      els.tableWrap.innerHTML = `
-        <div class="card">
-          <h2 style="margin:0 0 8px;">No products selected</h2>
-          <p class="muted" style="margin:0;">Go back to Browse and tick “Add to compare” on 2 products.</p>
+      tableHost.innerHTML = `
+        <div class="compare-wrap">
+          <div class="card">
+            <h2 style="margin:0 0 8px;">No products selected</h2>
+            <p class="muted" style="margin:0;">Go back to Browse and tick “Add to compare” on 2 products.</p>
+          </div>
         </div>
       `;
       return;
@@ -339,11 +278,9 @@
 
     const specMaps = products.map(buildSpecMap);
 
-    // Union of all keys across products
     const allKeys = new Set();
     specMaps.forEach((m) => [...m.keys()].forEach((k) => allKeys.add(k)));
 
-    // Preferred order first
     const preferred = [
       "brand",
       "model",
@@ -377,16 +314,16 @@
       .map((k) => {
         const cells = specMaps
           .map((m) => {
-            const raw = m.get(k);
-            const val = safeText(raw);
+            const val = safeText(m.get(k));
             return `<td>${val ? encodeHtml(val) : placeholderCell("—")}</td>`;
           })
           .join("");
+
         return `<tr><th class="spec">${encodeHtml(displayKey(k))}</th>${cells}</tr>`;
       })
       .join("");
 
-    els.tableWrap.innerHTML = `
+    tableHost.innerHTML = `
       <div class="compare-wrap">
         <table class="compare-table">
           <thead>
@@ -403,9 +340,6 @@
     `;
   }
 
-  // -----------------------------
-  // Data + init
-  // -----------------------------
   async function loadProducts() {
     const res = await fetch(DATA_URL, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to load ${DATA_URL}`);
@@ -421,15 +355,12 @@
       .filter(Boolean);
   }
 
-  // -----------------------------
-  // Idle timeout (optional)
-  // -----------------------------
+  // Idle timeout
   let idleTimer = null;
   function resetIdle() {
     if (!IDLE_MINUTES) return;
     if (idleTimer) clearTimeout(idleTimer);
     idleTimer = setTimeout(() => {
-      // Optionally clear compare on timeout
       if (CLEAR_ON_LEAVE) clearCompare();
       window.location.href = "index.html";
     }, IDLE_MINUTES * 60 * 1000);
@@ -443,54 +374,40 @@
     resetIdle();
   }
 
-  // -----------------------------
-  // Clear compare when leaving compare screen
-  // -----------------------------
   function bindClearOnLeave() {
     if (!CLEAR_ON_LEAVE) return;
 
-    // Clears when navigating away/closing tab
     window.addEventListener("beforeunload", () => {
       clearCompare();
     });
 
-    // Also clear if they click any link away
     document.addEventListener("click", (e) => {
       const a = e.target.closest("a");
       if (!a) return;
       const href = a.getAttribute("href") || "";
-      // if it goes somewhere else (not staying on compare)
-      if (href && !href.includes("compare.html")) {
-        clearCompare();
-      }
+      if (href && !href.includes("compare.html")) clearCompare();
     });
   }
 
   async function init() {
+    if (els.pageTitle) els.pageTitle.textContent = "Compare";
+
+    updateCompareCount();
+    bindIdleEvents();
+    bindClearOnLeave();
+
     try {
-      if (els.title) els.title.textContent = "Compare";
-
-      if (els.clearBtn) {
-        els.clearBtn.addEventListener("click", () => {
-          clearCompare();
-          renderCompare([]);
-        });
-      }
-
-      bindIdleEvents();
-      bindClearOnLeave();
-
       const all = await loadProducts();
       const compared = pickCompared(all);
-
-      // Enforce “2 only” UX: if 1 selected, still show table but with one column
       renderCompare(compared);
     } catch (err) {
       console.error(err);
-      els.tableWrap.innerHTML = `
-        <div class="card error">
-          <h2 style="margin:0 0 8px;">Compare failed</h2>
-          <p class="muted" style="margin:0;">Check that <code>${encodeHtml(DATA_URL)}</code> exists and is valid JSON.</p>
+      tableHost.innerHTML = `
+        <div class="compare-wrap">
+          <div class="card error">
+            <h2 style="margin:0 0 8px;">Compare failed</h2>
+            <p class="muted" style="margin:0;">Check that <code>${encodeHtml(DATA_URL)}</code> exists and is valid JSON.</p>
+          </div>
         </div>
       `;
     }
