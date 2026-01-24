@@ -25,6 +25,26 @@ if (search) {
 
 function render() {
   if (!list || !search) return;
+const imgSrc = p.image || "Images/placeholder.jpg";
+
+div.innerHTML = `
+  <div class="card-image">
+    <img src="${imgSrc}" alt="${p.brand} ${p.model}" loading="lazy">
+  </div>
+
+  <h3>${p.brand} ${p.model}</h3>
+  <div class="price">£${p.price_gbp}</div>
+  <div>${p.value_for_money || ""}</div>
+  <div>Weight: ${p.weight_g} g</div>
+
+  ${
+    showRewards
+      ? `<div class="rewards">Rewards value: £${(p.price_gbp * 4 / 100).toFixed(2)}</div>`
+      : ""
+  }
+
+  <a href="product.html?id=${encodeURIComponent(p.id)}">View details</a>
+`;
 
   const q = search.value.toLowerCase();
   list.innerHTML = "";
