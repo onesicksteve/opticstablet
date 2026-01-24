@@ -1,26 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RSPB Conwy - Optics Guide</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="data:,">
 </head>
 
 <body>
   <div class="container">
-    <h1>RSPB Conwy</h1>
-    <p>Optics Guide</p>
+    <header class="home-hero">
+      <div class="home-hero-top">
+        <div>
+          <h1 class="home-title">RSPB Conwy</h1>
+          <p class="home-subtitle">Optics Guide</p>
+        </div>
+      </div>
 
-    <div class="home-links">
-      <ul>
-        <li><a href="browse.html?category=compact">Compact Binoculars</a></li>
-        <li><a href="browse.html?category=binoculars">Binoculars</a></li>
-        <li><a href="browse.html?category=scopes">Spotting Scopes</a></li>
-      </ul>
-    </div>
+      <div class="home-intro">
+        Tap a category to browse products. Use compare to view two side by side.
+      </div>
+    </header>
+
+    <main class="home-grid">
+      <a class="home-card" href="browse.html?category=compact">
+        <div class="home-card-icon" aria-hidden="true">🔎</div>
+        <div class="home-card-body">
+          <h2>Compact Binoculars</h2>
+          <p>Small, light, easy to carry.</p>
+        </div>
+        <div class="home-card-cta">Browse →</div>
+      </a>
+
+      <a class="home-card" href="browse.html?category=binoculars">
+        <div class="home-card-icon" aria-hidden="true">🦉</div>
+        <div class="home-card-body">
+          <h2>Binoculars</h2>
+          <p>Everyday birding and wildlife.</p>
+        </div>
+        <div class="home-card-cta">Browse →</div>
+      </a>
+
+      <a class="home-card" href="browse.html?category=scopes">
+        <div class="home-card-icon" aria-hidden="true">🎯</div>
+        <div class="home-card-body">
+          <h2>Spotting Scopes</h2>
+          <p>Long-distance viewing and detail.</p>
+        </div>
+        <div class="home-card-cta">Browse →</div>
+      </a>
+    </main>
+
+    <footer class="home-footer">
+      <span class="muted">RSPB Conwy • Internal optics tablet guide</span>
+    </footer>
   </div>
-    <script src="js/kiosk-timeout.js"></script>
-  <script src="js/browse.js"></script>
 </body>
 </html>
