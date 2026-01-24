@@ -121,7 +121,6 @@ function toggleCompare(id, checked){
     setCompareIds(ids);
 
     if (ids.length === 2){
-      // Auto-open compare (locked behaviour)
       window.location.href = "compare.html";
       return;
     }
@@ -152,10 +151,9 @@ function render(){
     const bestFor = Array.isArray(p.best_for) ? p.best_for.slice(0, 5) : [];
     const thumb = p.image ? `<img src="${escapeHtml(p.image)}" alt="">` : `<span>Image</span>`;
 
-    // Highlights (locked trio)
     const warranty = p.warranty || "";
     const vfm = p.value_for_money || "";
-    const weight = (typeof p.weight_g === "number") ? `${p.weight_g} g` : "";
+    const weight = (typeof p.weight_g === "number" && p.weight_g > 0) ? `${p.weight_g} g` : "";
 
     return `
       <article class="card">
@@ -189,12 +187,10 @@ function render(){
     `;
   }).join("");
 
-  // Wire compare checkboxes
   grid.querySelectorAll('input[type="checkbox"][data-id]').forEach(cb => {
     cb.addEventListener("change", (e) => {
       const id = e.target.getAttribute("data-id");
       toggleCompare(id, e.target.checked);
-      // If we didn't navigate away, re-render tray and list to reflect state.
       renderTray();
       render();
     });
@@ -210,7 +206,6 @@ async function init(){
   // Reset search each entry (kiosk behaviour)
   searchEl.value = "";
 
-  // Staff toggle
   modeToggle.checked = isStaffMode();
   modeToggle.addEventListener("change", () => {
     setStaffMode(modeToggle.checked);
