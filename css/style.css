@@ -8,13 +8,13 @@
 }
 
 :root {
-  --bg: #144650;           /* deep green */
+  --bg: #144650;                 /* requested solid background */
   --panel: rgba(255,255,255,0.06);
   --panel-2: rgba(255,255,255,0.08);
-  --border: rgba(255,255,255,0.10);
+  --border: rgba(255,255,255,0.12);
   --text: rgba(255,255,255,0.92);
   --muted: rgba(255,255,255,0.70);
-  --accent: #bfe7d3;       /* pale mint */
+  --accent: #bfe7d3;
   --accent-2: #8fd6b6;
   --shadow: 0 10px 30px rgba(0,0,0,0.35);
   --shadow-soft: 0 8px 18px rgba(0,0,0,0.28);
@@ -31,8 +31,7 @@ body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
-  background: background: #082c22; /* solid RSPB-style green */
-    
+  background: var(--bg);
 }
 
 /* ---------- Layout ---------- */
@@ -132,7 +131,7 @@ a:hover {
   border: 1px solid rgba(255,255,255,0.14);
   background: rgba(0,0,0,0.18);
   color: var(--text);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.25); /* dropshadow */
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
   text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
@@ -153,7 +152,6 @@ a:hover {
 }
 
 /* ---------- Grid ---------- */
-/* 3 columns desktop, 2 columns tablet, 1 column mobile */
 #grid {
   margin-top: 16px;
   display: grid;
@@ -179,7 +177,7 @@ a:hover {
   background: var(--panel);
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: var(--shadow);              /* dropshadow */
+  box-shadow: var(--shadow);
   transition: transform 120ms ease, background 120ms ease;
 }
 
@@ -188,10 +186,10 @@ a:hover {
   background: var(--panel-2);
 }
 
-/* Square thumbnail area */
+/* ---------- Square thumbnail ---------- */
 .card-image {
   width: 100%;
-  aspect-ratio: 1 / 1;                    /* square */
+  aspect-ratio: 1 / 1;
   background: rgba(255,255,255,0.06);
   border-bottom: 1px solid var(--border);
   display: grid;
@@ -199,16 +197,15 @@ a:hover {
   overflow: hidden;
 }
 
-/* The actual image stays inside the square */
 .card-image img {
   width: 100%;
   height: 100%;
-  object-fit: contain;                    /* keeps full product visible */
-  padding: 10px;                          /* breathing room */
-  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.25)); /* image dropshadow */
+  object-fit: contain;
+  padding: 10px;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.25));
 }
 
-/* Content under image */
+/* ---------- Card body ---------- */
 .card-body {
   padding: 14px 14px 16px;
   display: grid;
@@ -224,7 +221,6 @@ a:hover {
 .price {
   font-size: 18px;
   font-weight: 700;
-  color: #ffffff;
 }
 
 .subline {
@@ -233,7 +229,7 @@ a:hover {
   line-height: 1.35;
 }
 
-/* Chips */
+/* ---------- Chips ---------- */
 .chips {
   display: flex;
   flex-wrap: wrap;
@@ -249,7 +245,7 @@ a:hover {
   color: rgba(255,255,255,0.85);
 }
 
-/* Meta rows */
+/* ---------- Meta rows ---------- */
 .meta-grid {
   display: grid;
   gap: 8px;
@@ -271,6 +267,7 @@ a:hover {
   color: rgba(255,255,255,0.68);
 }
 
+/* ---------- Rewards ---------- */
 .rewards {
   padding: 10px 12px;
   border-radius: 12px;
@@ -281,7 +278,7 @@ a:hover {
   line-height: 1.35;
 }
 
-/* Actions */
+/* ---------- Actions ---------- */
 .card-actions {
   margin-top: 4px;
   display: flex;
@@ -305,7 +302,7 @@ a:hover {
   accent-color: var(--accent-2);
 }
 
-/* Error card */
+/* ---------- Error card ---------- */
 .card.error {
   padding: 16px;
 }
