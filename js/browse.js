@@ -108,8 +108,21 @@ function wireCompareCheckboxes(){
   });
 }
 (async function init(){
-  const cat = getParam("cat") || "Binoculars";
-  document.getElementById("pageTitle").textContent = `Browse ${cat.toLowerCase()}`;
+  // Category may be passed as a human label ("Binoculars") or a URL slug ("binoculars").
+  // Normalise both URL param + product category so they always match.
+  const catRaw = getParam("cat") || "binoculars";
+  const slugify = (val) => (val ?? "")
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  const catSlug = slugify(catRaw);
+  // Display a nicer title while still using a slug for matching
+  const titleText = catRaw.toString().trim().replace(/-/g, " ") || "binoculars";
+  document.getElementById("pageTitle").textContent = `Browse ${titleText.toLowerCase()}`;
 
   const rewardsToggle = document.getElementById("rewardsToggle");
   rewardsToggle.checked = getRewardsMode();
@@ -133,7 +146,8 @@ function wireCompareCheckboxes(){
   function render(){
     setComparePill();
     const q = (searchInput.value || "").trim().toLowerCase();
-    const filtered = all.filter(p => (p.category || "") === cat)
+    const filtered = all
+      .filter(p => slugify(p.category) === catSlug)
       .filter(p => !q || (p.name||"").toLowerCase().includes(q) || (p.brand||"").toLowerCase().includes(q));
     document.getElementById("itemCount").textContent = `${filtered.length} item(s)`;
     const grid = document.getElementById("grid");
