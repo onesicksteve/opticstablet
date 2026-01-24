@@ -675,3 +675,78 @@ code {
   opacity: 0.95;
   text-decoration: none;
 }
+/* =========================
+   Compare table (make it look right)
+   ========================= */
+
+.compare-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 14px 40px;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.25);
+}
+
+.compare-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  vertical-align: middle;
+  color: rgba(255,255,255,0.92);
+  font-size: 16px;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
+.compare-table tbody tr:nth-child(odd) td,
+.compare-table tbody tr:nth-child(odd) th.spec {
+  background: rgba(255,255,255,0.03);
+}
+
+.compare-table th.spec {
+  width: 34%;
+  font-weight: 800;
+  color: rgba(255,255,255,0.95);
+}
+
+.compare-table thead th.spec {
+  width: 34%;
+}
+
+.compare-table thead th:not(.spec) {
+  text-align: left;
+}
+
+.compare-table td {
+  text-align: left;
+}
+
+@media (max-width: 900px) {
+  .compare-table th,
+  .compare-table td {
+    font-size: 15px;
+    padding: 12px 12px;
+  }
+  .compare-table th.spec {
+    width: 42%;
+  }
+}
