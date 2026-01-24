@@ -73,7 +73,10 @@ toggleRewards.addEventListener("change", () => {
   render();
 });
 
-search.addEventListener("input", render);
+if (search) {
+  search.addEventListener("input", render);
+}
+
 
 function render() {
   if (!list) return;
