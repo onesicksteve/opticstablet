@@ -1,11 +1,17 @@
-Compare v2 patch (spec-table ready)
+Rewards Toggle Patch (Option B: neutral toggle)
 
-Upload/overwrite these files in your repo:
+Uploads/overwrites:
+- browse.html
 - compare.html
+- js/browse.js
 - js/compare.js
 - css/screen2.css
-- data/products.json  (this version adds "specs": {} to every product)
 
-Then:
-1) On Browse, tick 2 items -> Compare opens.
-2) Add specs per product under the "specs" object using your exact table row labels.
+What it adds:
+- "Show rewards value" toggle on Browse and Compare.
+- When ON, shows:
+  Rewards: (2 pts/£) points and £ value
+  Double points: (4 pts/£) points and £ value
+- Values are based on price_gbp and points are rounded down.
+
+Note: products.json unchanged.

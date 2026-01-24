@@ -1,6 +1,6 @@
 const DATA_URL = "data/products.json";
 const COMPARE_KEY = "rspb_compare_ids";
-const MODE_KEY = "rspb_mode_staff";
+const REWARDS_KEY = "rspb_show_rewards";
 
 const grid = document.getElementById("grid");
 const statusEl = document.getElementById("status");
@@ -14,7 +14,7 @@ const compareCount = document.getElementById("compareCount");
 const clearCompareBtn = document.getElementById("clearCompare");
 const goCompareBtn = document.getElementById("goCompare");
 
-const modeToggle = document.getElementById("modeToggle");
+const rewardsToggle = document.getElementById("rewardsToggle");
 
 let products = [];
 let category = "binoculars";
@@ -33,6 +33,19 @@ function getCategoryFromUrl(){
   return url.searchParams.get("cat") || "binoculars";
 }
 
+
+function calcRewards(price){
+  const p = (typeof price === "number" && isFinite(price)) ? price : 0;
+  const normalPoints = Math.floor(p * 2);
+  const doublePoints = Math.floor(p * 4);
+  return {
+    normalPoints,
+    normalValue: normalPoints / 100,
+    doublePoints,
+    doubleValue: doublePoints / 100
+  };
+}
+
 function formatGBP(n){
   if (typeof n !== "number") return "";
   return new Intl.NumberFormat("en-GB", { style:"currency", currency:"GBP" }).format(n);
@@ -48,11 +61,11 @@ function setCompareIds(ids){
   localStorage.setItem(COMPARE_KEY, JSON.stringify(ids));
 }
 
-function isStaffMode(){
-  return localStorage.getItem(MODE_KEY) === "true";
+function isRewardsOn(){
+  return localStorage.getItem(REWARDS_KEY) === "true";
 }
-function setStaffMode(v){
-  localStorage.setItem(MODE_KEY, v ? "true" : "false");
+function setRewardsOn(v){
+  localStorage.setItem(REWARDS_KEY, v ? "true" : "false");
 }
 
 function escapeHtml(s){
@@ -142,7 +155,7 @@ function render(){
 
   statusEl.textContent = filtered.length ? `${filtered.length} item(s)` : "No results";
 
-  const staff = isStaffMode();
+  const showRewards = isRewardsOn();
 
   grid.innerHTML = filtered.map(p => {
     const price = formatGBP(p.price_gbp);
@@ -169,7 +182,7 @@ function render(){
           <div><b>Warranty:</b> ${escapeHtml(warranty)}</div>
           <div><b>Value:</b> ${escapeHtml(vfm)}</div>
           <div><b>Weight:</b> ${escapeHtml(weight)}</div>
-          ${staff && p.staff_notes ? `<div><b>Staff:</b> ${escapeHtml(p.staff_notes)}</div>` : ""}
+          ${showRewards ? (() => { const r = calcRewards(p.price_gbp); return `<div class="rewardsLine"><b>Rewards:</b> ${r.normalPoints} pts (${escapeHtml(formatGBP(r.normalValue))})</div><div class="rewardsLine"><b>Double points:</b> ${r.doublePoints} pts (${escapeHtml(formatGBP(r.doubleValue))})</div>`; })() : ""}
         </div>
 
         <div class="pills">
@@ -206,9 +219,9 @@ async function init(){
   // Reset search each entry (kiosk behaviour)
   searchEl.value = "";
 
-  modeToggle.checked = isStaffMode();
-  modeToggle.addEventListener("change", () => {
-    setStaffMode(modeToggle.checked);
+  rewardsToggle.checked = isRewardsOn();
+  rewardsToggle.addEventListener("change", () => {
+    setRewardsOn(rewardsToggle.checked);
     render();
   });
 

@@ -1,5 +1,6 @@
 const DATA_URL = "data/products.json";
 const COMPARE_KEY = "rspb_compare_ids";
+const REWARDS_KEY = "rspb_show_rewards";
 
 const statusEl = document.getElementById("status");
 const headerEl = document.getElementById("compareHeader");
@@ -8,6 +9,26 @@ const tbody = document.getElementById("compareBody");
 const colA = document.getElementById("colA");
 const colB = document.getElementById("colB");
 const clearTop = document.getElementById("clearCompareTop");
+const rewardsToggle = document.getElementById("rewardsToggle");
+
+
+function isRewardsOn(){
+  return localStorage.getItem(REWARDS_KEY) === "true";
+}
+function setRewardsOn(v){
+  localStorage.setItem(REWARDS_KEY, v ? "true" : "false");
+}
+function calcRewards(price){
+  const p = (typeof price === "number" && isFinite(price)) ? price : 0;
+  const normalPoints = Math.floor(p * 2);
+  const doublePoints = Math.floor(p * 4);
+  return {
+    normalPoints,
+    normalValue: normalPoints / 100,
+    doublePoints,
+    doubleValue: doublePoints / 100
+  };
+}
 
 function formatGBP(n){
   if (typeof n !== "number") return "";
@@ -51,6 +72,7 @@ function renderHeader(a, b){
         <div>
           <h2 class="compareTitle">${escapeHtml(a.brand)} ${escapeHtml(a.model)}</h2>
           <div class="compareMeta">${escapeHtml(formatGBP(a.price_gbp))} · ${escapeHtml(a.warranty || "")} · ${escapeHtml((a.weight_g ?? ""))}${a.weight_g ? " g" : ""}</div>
+          ${isRewardsOn() ? (()=>{const r=calcRewards(a.price_gbp); return `<div class="rewardsMeta">Rewards: ${r.normalPoints} pts (${escapeHtml(formatGBP(r.normalValue))})</div><div class="rewardsMeta">Double points: ${r.doublePoints} pts (${escapeHtml(formatGBP(r.doubleValue))})</div>`;})() : ""}
           <div class="pills">${tagsA.map(pill).join("")}</div>
         </div>
       </div>
@@ -62,6 +84,7 @@ function renderHeader(a, b){
         <div>
           <h2 class="compareTitle">${escapeHtml(b.brand)} ${escapeHtml(b.model)}</h2>
           <div class="compareMeta">${escapeHtml(formatGBP(b.price_gbp))} · ${escapeHtml(b.warranty || "")} · ${escapeHtml((b.weight_g ?? ""))}${b.weight_g ? " g" : ""}</div>
+          ${isRewardsOn() ? (()=>{const r=calcRewards(b.price_gbp); return `<div class="rewardsMeta">Rewards: ${r.normalPoints} pts (${escapeHtml(formatGBP(r.normalValue))})</div><div class="rewardsMeta">Double points: ${r.doublePoints} pts (${escapeHtml(formatGBP(r.doubleValue))})</div>`;})() : ""}
           <div class="pills">${tagsB.map(pill).join("")}</div>
         </div>
       </div>
@@ -116,6 +139,15 @@ function renderTable(a, b){
 async function init(){
   clearTop.addEventListener("click", () => {
     setCompareIds([]);
+
+  // Rewards toggle (shared with Browse)
+  if (rewardsToggle){
+    rewardsToggle.checked = isRewardsOn();
+    rewardsToggle.addEventListener("change", () => {
+      setRewardsOn(rewardsToggle.checked);
+      window.location.reload();
+    });
+  }
     window.location.href = "browse.html";
   });
 

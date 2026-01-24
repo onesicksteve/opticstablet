@@ -6,9 +6,64 @@
   <title>Product</title>
   <link rel="stylesheet" href="css/screen2.css" />
 </head>
-<body>
-  <main class="wrap">
-    <p class="muted">Product detail screen will be implemented later.</p>
+<body class="productPage">
+  <header class="wrap browseHeader">
+    <div class="topBar">
+      <a id="backBtn" class="btn secondary" href="browse.html" aria-label="Back to browse">← Back</a>
+      <h1 id="pageTitle" class="browseTitle">Product</h1>
+      <label class="toggle">
+        <input type="checkbox" id="rewardsToggle" />
+        <span>Show rewards value</span>
+      </label>
+    </div>
+  </header>
+
+  <main class="wrap productMain">
+    <div id="status" class="muted"></div>
+
+    <section id="productCard" class="productCard" hidden>
+      <div class="productTop">
+        <div class="productImage" id="productImage"></div>
+        <div class="productSummary">
+          <h2 id="productName" class="productName"></h2>
+          <div id="productPrice" class="productPrice"></div>
+
+          <div class="productQuickFacts" id="quickFacts"></div>
+
+          <div class="productPills" id="bestFor"></div>
+
+          <div class="productActions">
+            <button id="addToCompare" class="btn secondary" type="button">Add to compare</button>
+            <a id="goCompare" class="btn" href="compare.html" hidden>Compare now</a>
+          </div>
+
+          <div id="rewardsBox" class="rewardsBox" hidden></div>
+        </div>
+      </div>
+
+      <div class="productContent">
+        <section class="contentBlock">
+          <h3>Description</h3>
+          <div id="description" class="prose"></div>
+        </section>
+
+        <section class="contentBlock">
+          <h3>Key features</h3>
+          <ul id="features" class="featureList"></ul>
+        </section>
+
+        <section class="contentBlock">
+          <h3>Specifications</h3>
+          <div class="tableScroll">
+            <table class="specTable" aria-label="Product specifications">
+              <tbody id="specsBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </section>
   </main>
+
+  <script src="js/product.js"></script>
 </body>
 </html>
