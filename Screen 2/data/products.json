@@ -99,38 +99,6 @@
     }
   },
   {
-    "id": "rspb-asw-8x40",
-    "category": "binoculars",
-    "brand": "RSPB",
-    "model": "ASW 8x40",
-    "price_gbp": 160,
-    "warranty": "5-year warranty",
-    "value_for_money": "Traditional wide-field binoculars offering excellent value",
-    "weight_g": 698,
-    "best_for": [
-      "Entry level",
-      "Wide field of view",
-      "General wildlife"
-    ],
-    "image": "Images/asw.jpg",
-    "staff_notes": "",
-    "specs": {
-      "Magnification": "8",
-      "Objective lens diameter (mm)": "40",
-      "ED lens": "No",
-      "Close focus distance": "4m",
-      "Field of view (degrees)": "8.2",
-      "Field of view (m/1000m)": "143",
-      "Eye relief (mm)": "13",
-      "Exit pupil (mm)": "5",
-      "Waterproof": "No",
-      "Nitrogen filled": "No",
-      "Weight (g)": "698",
-      "Dimensions (mm)": "L130 x W176",
-      "Warranty": "5 years"
-    }
-  },
-  {
     "id": "rspb-avocet-8x32",
     "category": "binoculars",
     "brand": "RSPB",
@@ -445,7 +413,7 @@
       "Waterproof": "Yes",
       "Nitrogen-filled": "Yes",
       "Weight (g)": "740",
-      "Dimensions L x W x H (mm)": "143 x 135 x 53",
+      "Dimensions l x w x h (mm)": "143 x 135 x 53",
       "Warranty": "10 years"
     }
   },
@@ -478,7 +446,7 @@
       "Waterproof": "Yes",
       "Nitrogen-filled": "Yes",
       "Weight (g)": "715",
-      "Dimensions L x W x H (mm)": "143 x 135 x 53",
+      "Dimensions l x w x h (mm)": "143 x 135 x 53",
       "Warranty": "10 years"
     }
   },
@@ -546,6 +514,38 @@
       "Weight (g)": "700",
       "Dimensions L x W x H (mm)": "145 x 125 x 50",
       "Warranty": "10 years"
+    }
+  },
+  {
+    "id": "rspb-asw-8x40",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "ASW 8x40",
+    "price_gbp": 160,
+    "warranty": "5-year warranty",
+    "value_for_money": "Traditional wide-field binoculars offering excellent value",
+    "weight_g": 698,
+    "best_for": [
+      "Entry level",
+      "Wide field of view",
+      "General wildlife"
+    ],
+    "image": "Images/asw.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8",
+      "Objective lens diameter (mm)": "40",
+      "ED lens": "No",
+      "Close focus distance": "4m",
+      "Field of view (degrees)": "8.2",
+      "Field of view (m/1000m)": "143",
+      "Eye relief (mm)": "13",
+      "Exit pupil (mm)": "5",
+      "Waterproof": "No",
+      "Nitrogen filled": "No",
+      "Weight (g)": "698",
+      "Dimensions (mm)": "L130 x W176",
+      "Warranty": "5 years"
     }
   }
 ]
