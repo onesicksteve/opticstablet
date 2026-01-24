@@ -16,10 +16,6 @@
     compareCount: document.getElementById("compareCount"),
     grid: document.getElementById("grid"),
   };
-if (!grid || !searchInput || !itemCount) {
-  console.error("browse.html is missing required elements (grid/searchInput/itemCount).");
-  return;
-}
 
   // Fail fast if the page is missing required IDs
   if (!els.grid || !els.searchInput || !els.itemCount) {
@@ -53,7 +49,10 @@ if (!grid || !searchInput || !itemCount) {
     const num = Number(n);
     if (!Number.isFinite(num)) return "";
     try {
-      return new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(num);
+      return new Intl.NumberFormat("en-GB", {
+        style: "currency",
+        currency: "GBP",
+      }).format(num);
     } catch {
       return "£" + num.toFixed(2);
     }
@@ -62,12 +61,10 @@ if (!grid || !searchInput || !itemCount) {
   function safeImgSrc(src) {
     // products.json uses "Images/..." with spaces — encode spaces safely
     if (!src) return "";
-    // encodeURI keeps slashes but converts spaces
     return encodeURI(src);
   }
 
   function placeholderDataUri(label = "No image") {
-    // Lightweight inline SVG placeholder (no extra files needed)
     const svg = `
       <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
         <rect width="100%" height="100%" fill="rgba(0,0,0,0.25)"/>
@@ -83,14 +80,16 @@ if (!grid || !searchInput || !itemCount) {
     try {
       const raw = localStorage.getItem(STORAGE_COMPARE);
       const arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr : [];
+      if (!Array.isArray(arr)) return [];
+      // normalize to strings
+      return arr.map(String);
     } catch {
       return [];
     }
   }
 
   function setCompareIds(ids) {
-    localStorage.setItem(STORAGE_COMPARE, JSON.stringify(ids));
+    localStorage.setItem(STORAGE_COMPARE, JSON.stringify(ids.map(String)));
   }
 
   function updateCompareCount() {
@@ -129,7 +128,6 @@ if (!grid || !searchInput || !itemCount) {
   let allProducts = [];
 
   function matchesCategory(p) {
-    // Your products.json uses categories like "binoculars" etc.
     return slug(p.category) === categoryKey;
   }
 
@@ -161,7 +159,8 @@ if (!grid || !searchInput || !itemCount) {
 
   function buildCard(p, rewardsShown) {
     const compareIds = getCompareIds();
-    const checked = compareIds.includes(p.id);
+    const pid = String(p.id);
+    const checked = compareIds.includes(pid);
 
     const img = safeImgSrc(p.image) || placeholderDataUri("No image");
     const name = p.name || `${p.brand || ""} ${p.model || ""}`.trim();
@@ -181,6 +180,8 @@ if (!grid || !searchInput || !itemCount) {
       `
       : "";
 
+    const missingImg = placeholderDataUri("Image missing");
+
     return `
       <article class="card">
         <div class="card-image">
@@ -188,7 +189,7 @@ if (!grid || !searchInput || !itemCount) {
             src="${img}"
             alt="${name.replace(/"/g, "&quot;")}"
             loading="lazy"
-            onerror="this.src='${placeholderDataUri("Image missing")}';"
+            onerror="this.onerror=null;this.src='${missingImg}';"
           />
         </div>
 
@@ -207,10 +208,10 @@ if (!grid || !searchInput || !itemCount) {
           ${rewardsBlock}
 
           <div class="card-actions">
-            <a class="btn" href="product.html?id=${encodeURIComponent(p.id)}">View details</a>
+            <a class="btn" href="product.html?id=${encodeURIComponent(pid)}">View details</a>
 
             <label class="compare-toggle">
-              <input type="checkbox" data-compare-id="${p.id}" ${checked ? "checked" : ""}>
+              <input type="checkbox" data-compare-id="${pid}" ${checked ? "checked" : ""}>
               <span>Add to compare</span>
             </label>
           </div>
@@ -222,7 +223,7 @@ if (!grid || !searchInput || !itemCount) {
   function wireCompareToggles() {
     document.querySelectorAll('input[type="checkbox"][data-compare-id]').forEach(cb => {
       cb.addEventListener("change", (e) => {
-        const id = e.target.getAttribute("data-compare-id");
+        const id = String(e.target.getAttribute("data-compare-id"));
         const ids = getCompareIds();
 
         if (e.target.checked) {
