@@ -16,6 +16,10 @@
     compareCount: document.getElementById("compareCount"),
     grid: document.getElementById("grid"),
   };
+if (!grid || !searchInput || !itemCount) {
+  console.error("browse.html is missing required elements (grid/searchInput/itemCount).");
+  return;
+}
 
   // Fail fast if the page is missing required IDs
   if (!els.grid || !els.searchInput || !els.itemCount) {
