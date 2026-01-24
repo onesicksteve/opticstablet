@@ -1,11 +1,11 @@
-CSS split patch (Screen 1 + Screen 2)
+Compare v2 patch (spec-table ready)
 
-Upload these files to your repo root, overwriting existing:
-- index.html
-- browse.html
+Upload/overwrite these files in your repo:
 - compare.html
-- product.html
-- css/screen1.css
+- js/compare.js
 - css/screen2.css
+- data/products.json  (this version adds "specs": {} to every product)
 
-Then delete (or ignore) css/style.css, OR keep it but it won't be used by these pages.
+Then:
+1) On Browse, tick 2 items -> Compare opens.
+2) Add specs per product under the "specs" object using your exact table row labels.

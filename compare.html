@@ -6,9 +6,39 @@
   <title>Compare</title>
   <link rel="stylesheet" href="css/screen2.css" />
 </head>
-<body>
-  <main class="wrap">
-    <p class="muted">Compare screen will be implemented next.</p>
+<body class="comparePage">
+  <header class="wrap browseHeader">
+    <div class="topBar">
+      <a class="btn secondary" href="browse.html" aria-label="Back to browse">← Back</a>
+      <h1 class="browseTitle">Compare</h1>
+      <button id="clearCompareTop" class="btn secondary" type="button">Clear</button>
+    </div>
+  </header>
+
+  <main class="wrap compareMain">
+    <div id="status" class="muted"></div>
+
+    <section id="compareHeader" class="compareHeader" hidden></section>
+
+    <section id="compareTableWrap" hidden>
+      <div class="tableScroll">
+        <table class="compareTable" aria-label="Compare specs">
+          <thead>
+            <tr>
+              <th class="specCol">Spec</th>
+              <th id="colA">Item A</th>
+              <th id="colB">Item B</th>
+            </tr>
+          </thead>
+          <tbody id="compareBody"></tbody>
+        </table>
+      </div>
+      <p class="muted small compareNote">
+        Tip: Populate each product’s <code>specs</code> in <code>data/products.json</code>. Keys should match your printed spec tables exactly.
+      </p>
+    </section>
   </main>
+
+  <script src="js/compare.js"></script>
 </body>
 </html>
