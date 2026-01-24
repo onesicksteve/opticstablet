@@ -609,3 +609,35 @@ body:not(.home) .home-help,
 body:not(.home) .home-footer{
   all: unset;
 }
+/* --- Make all browse cards the same height + align actions --- */
+#grid .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Make the body fill space, and keep a consistent structure */
+#grid .card .card-body{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Clamp description so one product can't make the card taller */
+#grid .card .subline{
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Reserve a fixed space for chips so cards align even with 0–3 chips */
+#grid .card .chips{
+  min-height: 46px;    /* tweak if needed */
+  align-content: flex-start;
+}
+
+/* Push actions to the bottom of the card */
+#grid .card .card-actions{
+  margin-top: auto;
+}
