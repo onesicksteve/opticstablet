@@ -546,3 +546,19 @@ code {
   height: 10px;
   background: rgba(0,0,0,0.12);
 }
+/* Compare table when only comparing 2 items */
+.compare-row.compare-2 {
+  grid-template-columns: 220px repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 1000px) {
+  .compare-row.compare-2 {
+    grid-template-columns: 180px repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .compare-row.compare-2 {
+    grid-template-columns: 140px 1fr;
+  }
+}
