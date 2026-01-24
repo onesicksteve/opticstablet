@@ -1,7 +1,7 @@
 [
   {
     "id": "rspb-skylark-8x32",
-    "category": "binoculars",
+    "category": "compact-binoculars",
     "brand": "RSPB",
     "model": "Skylark 8x32",
     "price_gbp": 90,
@@ -13,9 +13,8 @@
       "Beginners",
       "Travel"
     ],
-    "image": "Images/skylark 8x32.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-skylark-8x42",
@@ -31,9 +30,8 @@
       "All-round birding",
       "Beginners"
     ],
-    "image": "Images/skylark 8x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-skylark-10x42",
@@ -49,9 +47,8 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "Images/skylark 10x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-asw-8x40",
@@ -67,9 +64,8 @@
       "Wide field of view",
       "General wildlife"
     ],
-    "image": "Images/asw.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-avocet-8x32",
@@ -85,9 +81,8 @@
       "Lightweight",
       "All-round birding"
     ],
-    "image": "Images/avocet 8x32.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-avocet-8x42",
@@ -103,9 +98,8 @@
       "Upgrading",
       "Regular use"
     ],
-    "image": "Images/avocet 8x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-avocet-10x42",
@@ -121,9 +115,8 @@
       "Long distance",
       "Upgrading"
     ],
-    "image": "Images/avocet 10x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-harrier-8x32",
@@ -138,9 +131,8 @@
       "All-round birding",
       "Lightweight"
     ],
-    "image": "Images/harrier 8x32.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-harrier-8x42",
@@ -156,9 +148,8 @@
       "Upgrading",
       "Open habitats"
     ],
-    "image": "Images/harrier 8x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-harrier-10x42",
@@ -173,9 +164,8 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "Images/harrier 10x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-harrierx-8x32",
@@ -191,9 +181,8 @@
       "Lightweight",
       "Upgrading"
     ],
-    "image": "Images/harrier x 8x32.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-harrierx-8x42",
@@ -209,9 +198,8 @@
       "All-round birding",
       "Upgrading"
     ],
-    "image": "Images/harrier x 8x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-harrierx-10x42",
@@ -227,9 +215,8 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "Images/harrier x 10x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-buzzard-8x42",
@@ -245,9 +232,8 @@
       "All-round birding",
       "Low light"
     ],
-    "image": "Images/buzzard 8x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-buzzard-10x42",
@@ -263,9 +249,8 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "Images/buzzard 10x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-sparrowhawk-8.5x42",
@@ -281,9 +266,8 @@
       "All-round birding",
       "Low light"
     ],
-    "image": "Images/sparrowhawk 8.5x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   },
   {
     "id": "rspb-sparrowhawk-10x42",
@@ -299,8 +283,7 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "Images/sparrowhawk 10x42.jpg",
-    "staff_notes": "",
-    "specs": {}
+    "image": "",
+    "staff_notes": ""
   }
 ]
