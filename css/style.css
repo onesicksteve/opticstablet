@@ -8,10 +8,14 @@ body {
 a { color: #b7f0c8; }
 
 .card {
-  background: rgba(255,255,255,0.05);
-  padding: 12px;
-  margin: 12px 0;
-  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 }
 
 .price { font-weight: bold; }
