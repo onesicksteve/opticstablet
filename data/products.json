@@ -8,12 +8,8 @@
     "warranty": "1-year warranty",
     "value_for_money": "Affordable and lightweight entry-level binoculars",
     "weight_g": 450,
-    "best_for": [
-      "Entry level",
-      "Beginners",
-      "Travel"
-    ],
-    "image": "",
+    "best_for": ["Entry level", "Beginners", "Travel"],
+    "image": "Images/skylark 8x32.jpg",
     "staff_notes": ""
   },
   {
@@ -25,12 +21,8 @@
     "warranty": "1-year warranty",
     "value_for_money": "Affordable and reliable starter binoculars",
     "weight_g": 580,
-    "best_for": [
-      "Entry level",
-      "All-round birding",
-      "Beginners"
-    ],
-    "image": "",
+    "best_for": ["Entry level", "All-round birding", "Beginners"],
+    "image": "Images/skylark 8x42.jpg",
     "staff_notes": ""
   },
   {
@@ -42,14 +34,11 @@
     "warranty": "1-year warranty",
     "value_for_money": "Affordable entry-level option for longer reach",
     "weight_g": 580,
-    "best_for": [
-      "Entry level",
-      "Open habitats",
-      "Long distance"
-    ],
-    "image": "",
+    "best_for": ["Entry level", "Open habitats", "Long distance"],
+    "image": "Images/skylark 10x42.jpg",
     "staff_notes": ""
   },
+
   {
     "id": "rspb-asw-8x40",
     "category": "binoculars",
@@ -59,14 +48,11 @@
     "warranty": "5-year warranty",
     "value_for_money": "Traditional wide-field binoculars offering excellent value",
     "weight_g": 698,
-    "best_for": [
-      "Entry level",
-      "Wide field of view",
-      "General wildlife"
-    ],
-    "image": "",
+    "best_for": ["Entry level", "Wide field of view", "General wildlife"],
+    "image": "Images/asw.jpg",
     "staff_notes": ""
   },
+
   {
     "id": "rspb-avocet-8x32",
     "category": "binoculars",
@@ -76,12 +62,8 @@
     "warranty": "5-year warranty",
     "value_for_money": "Strong mid-range value in a lighter format",
     "weight_g": 463,
-    "best_for": [
-      "Upgrading",
-      "Lightweight",
-      "All-round birding"
-    ],
-    "image": "",
+    "best_for": ["Upgrading", "Lightweight", "All-round birding"],
+    "image": "Images/avocet 8x32.jpg",
     "staff_notes": ""
   },
   {
@@ -93,12 +75,8 @@
     "warranty": "5-year warranty",
     "value_for_money": "Strong mid-range value for regular birding",
     "weight_g": 617,
-    "best_for": [
-      "All-round birding",
-      "Upgrading",
-      "Regular use"
-    ],
-    "image": "",
+    "best_for": ["All-round birding", "Upgrading", "Regular use"],
+    "image": "Images/avocet 8x42.jpg",
     "staff_notes": ""
   },
   {
@@ -110,14 +88,11 @@
     "warranty": "5-year warranty",
     "value_for_money": "Strong mid-range value for longer-distance viewing",
     "weight_g": 615,
-    "best_for": [
-      "Open habitats",
-      "Long distance",
-      "Upgrading"
-    ],
-    "image": "",
+    "best_for": ["Open habitats", "Long distance", "Upgrading"],
+    "image": "Images/avocet 10x42.jpg",
     "staff_notes": ""
   },
+
   {
     "id": "rspb-harrier-8x32",
     "category": "binoculars",
@@ -127,11 +102,8 @@
     "warranty": "10-year warranty",
     "value_for_money": "Strong value for a lighter carry",
     "weight_g": 509,
-    "best_for": [
-      "All-round birding",
-      "Lightweight"
-    ],
-    "image": "",
+    "best_for": ["All-round birding", "Lightweight"],
+    "image": "Images/harrier 8x32.jpg",
     "staff_notes": ""
   },
   {
@@ -143,12 +115,8 @@
     "warranty": "10-year warranty",
     "value_for_money": "Strong value for everyday birding",
     "weight_g": 692,
-    "best_for": [
-      "All-round birding",
-      "Upgrading",
-      "Open habitats"
-    ],
-    "image": "",
+    "best_for": ["All-round birding", "Upgrading", "Open habitats"],
+    "image": "Images/harrier 8x42.jpg",
     "staff_notes": ""
   },
   {
@@ -160,13 +128,11 @@
     "warranty": "10-year warranty",
     "value_for_money": "Affordable option for distance viewing",
     "weight_g": 674,
-    "best_for": [
-      "Open habitats",
-      "Long distance"
-    ],
-    "image": "",
+    "best_for": ["Open habitats", "Long distance"],
+    "image": "Images/harrier 10x42.jpg",
     "staff_notes": ""
   },
+
   {
     "id": "rspb-harrierx-8x32",
     "category": "binoculars",
@@ -176,12 +142,8 @@
     "warranty": "10-year warranty",
     "value_for_money": "Premium performance in a lighter, more compact format",
     "weight_g": 524,
-    "best_for": [
-      "Experienced birders",
-      "Lightweight",
-      "Upgrading"
-    ],
-    "image": "",
+    "best_for": ["Experienced birders", "Lightweight", "Upgrading"],
+    "image": "Images/harrier x 8x32.jpg",
     "staff_notes": ""
   },
   {
@@ -193,12 +155,8 @@
     "warranty": "10-year warranty",
     "value_for_money": "Premium performance with excellent image quality",
     "weight_g": 716,
-    "best_for": [
-      "Experienced birders",
-      "All-round birding",
-      "Upgrading"
-    ],
-    "image": "",
+    "best_for": ["Experienced birders", "All-round birding", "Upgrading"],
+    "image": "Images/harrier x 8x42.jpg",
     "staff_notes": ""
   },
   {
@@ -210,14 +168,11 @@
     "warranty": "10-year warranty",
     "value_for_money": "Premium clarity and reach for demanding conditions",
     "weight_g": 693,
-    "best_for": [
-      "Experienced birders",
-      "Open habitats",
-      "Long distance"
-    ],
-    "image": "",
+    "best_for": ["Experienced birders", "Open habitats", "Long distance"],
+    "image": "Images/harrier x 10x42.jpg",
     "staff_notes": ""
   },
+
   {
     "id": "rspb-buzzard-8x42",
     "category": "binoculars",
@@ -227,12 +182,8 @@
     "warranty": "10-year warranty",
     "value_for_money": "Premium RSPB optics with outstanding edge-to-edge clarity",
     "weight_g": 740,
-    "best_for": [
-      "Experienced birders",
-      "All-round birding",
-      "Low light"
-    ],
-    "image": "",
+    "best_for": ["Experienced birders", "All-round birding", "Low light"],
+    "image": "Images/buzzard 8x42.jpg",
     "staff_notes": ""
   },
   {
@@ -244,14 +195,11 @@
     "warranty": "10-year warranty",
     "value_for_money": "Premium clarity and reach with edge-to-edge sharpness",
     "weight_g": 715,
-    "best_for": [
-      "Experienced birders",
-      "Open habitats",
-      "Long distance"
-    ],
-    "image": "",
+    "best_for": ["Experienced birders", "Open habitats", "Long distance"],
+    "image": "Images/buzzard 10x42.jpg",
     "staff_notes": ""
   },
+
   {
     "id": "rspb-sparrowhawk-8.5x42",
     "category": "binoculars",
@@ -261,12 +209,8 @@
     "warranty": "10-year warranty",
     "value_for_money": "Flagship RSPB binoculars with exceptional clarity and low-light performance",
     "weight_g": 700,
-    "best_for": [
-      "Experienced birders",
-      "All-round birding",
-      "Low light"
-    ],
-    "image": "",
+    "best_for": ["Experienced birders", "All-round birding", "Low light"],
+    "image": "Images/sparrowhawk 8.5x42.jpg",
     "staff_notes": ""
   },
   {
@@ -278,12 +222,8 @@
     "warranty": "10-year warranty",
     "value_for_money": "Flagship optics offering outstanding reach and edge-to-edge sharpness",
     "weight_g": 700,
-    "best_for": [
-      "Experienced birders",
-      "Open habitats",
-      "Long distance"
-    ],
-    "image": "",
+    "best_for": ["Experienced birders", "Open habitats", "Long distance"],
+    "image": "Images/sparrowhawk 10x42.jpg",
     "staff_notes": ""
   }
 ]
