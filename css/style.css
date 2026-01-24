@@ -757,3 +757,9 @@ a:active,
   transform: scale(0.98);
   opacity: 0.95;
 }
+/* Disable text selection for kiosk use */
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
