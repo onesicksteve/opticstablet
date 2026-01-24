@@ -1,7 +1,7 @@
 [
   {
     "id": "rspb-skylark-8x32",
-    "category": "compact-binoculars",
+    "category": "binoculars",
     "brand": "RSPB",
     "model": "Skylark 8x32",
     "price_gbp": 90,
@@ -13,8 +13,24 @@
       "Beginners",
       "Travel"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/skylark 8x32.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8x",
+      "Objective lens diameter (mm)": "32",
+      "ED lens": "No",
+      "Close focus distance (m)": "3",
+      "Field of view (degrees)": "7.4",
+      "Field of view (m/1000m)": "130",
+      "Eye relief (mm)": "16.8",
+      "Exit pupil (mm)": "4",
+      "Interpupillary distance (mm)": "53-72",
+      "Waterproof": "Yes",
+      "Nitrogen-filled": "Yes",
+      "Weight (g)": "450",
+      "Dimensions L x W x H (mm)": "120 x 120 x 50",
+      "Warranty": "1 year"
+    }
   },
   {
     "id": "rspb-skylark-8x42",
@@ -30,8 +46,24 @@
       "All-round birding",
       "Beginners"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/skylark 8x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8x",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "No",
+      "Close focus distance (m)": "4.5",
+      "Field of view (degrees)": "6.2",
+      "Field of view (m/1000m)": "108",
+      "Eye relief (mm)": "20.4",
+      "Exit pupil (mm)": "5.25",
+      "Interpupillary distance (mm)": "53-72",
+      "Waterproof": "Yes",
+      "Nitrogen-filled": "Yes",
+      "Weight (g)": "580",
+      "Dimensions L x W x H (mm)": "120 x 155 x 55",
+      "Warranty": "1 year"
+    }
   },
   {
     "id": "rspb-skylark-10x42",
@@ -47,8 +79,24 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/skylark 10x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "10x",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "No",
+      "Close focus distance (m)": "4.5",
+      "Field of view (degrees)": "5.8",
+      "Field of view (m/1000m)": "101",
+      "Eye relief (mm)": "16.9",
+      "Exit pupil (mm)": "4.2",
+      "Interpupillary distance (mm)": "53-72",
+      "Waterproof": "Yes",
+      "Nitrogen-filled": "Yes",
+      "Weight (g)": "580",
+      "Dimensions L x W x H (mm)": "120 x 155 x 55",
+      "Warranty": "1 year"
+    }
   },
   {
     "id": "rspb-asw-8x40",
@@ -64,8 +112,23 @@
       "Wide field of view",
       "General wildlife"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/asw.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8",
+      "Objective lens diameter (mm)": "40",
+      "ED lens": "No",
+      "Close focus distance": "4m",
+      "Field of view (degrees)": "8.2",
+      "Field of view (m/1000m)": "143",
+      "Eye relief (mm)": "13",
+      "Exit pupil (mm)": "5",
+      "Waterproof": "No",
+      "Nitrogen filled": "No",
+      "Weight (g)": "698",
+      "Dimensions (mm)": "L130 x W176",
+      "Warranty": "5 years"
+    }
   },
   {
     "id": "rspb-avocet-8x32",
@@ -81,8 +144,23 @@
       "Lightweight",
       "All-round birding"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/avocet 8x32.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8",
+      "Objective lens diameter (mm)": "32",
+      "ED lens": "No",
+      "Close focus distance": "3-3.5m",
+      "Field of view (degrees)": "7.4",
+      "Field of view (m/1000m)": "130",
+      "Eye relief (mm)": "16.8",
+      "Exit pupil (mm)": "4",
+      "Waterproof": "Yes",
+      "Nitrogen filled": "Yes",
+      "Weight (g)": "463",
+      "Dimensions (mm)": "L126 x W115",
+      "Warranty": "5 years"
+    }
   },
   {
     "id": "rspb-avocet-8x42",
@@ -98,8 +176,23 @@
       "Upgrading",
       "Regular use"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/avocet 8x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "No",
+      "Close focus distance": "3-3.5m",
+      "Field of view (degrees)": "6.3",
+      "Field of view (m/1000m)": "110",
+      "Eye relief (mm)": "20.4",
+      "Exit pupil (mm)": "5.2",
+      "Waterproof": "Yes",
+      "Nitrogen filled": "Yes",
+      "Weight (g)": "617",
+      "Dimensions (mm)": "L148 x W127",
+      "Warranty": "5 years"
+    }
   },
   {
     "id": "rspb-avocet-10x42",
@@ -115,8 +208,23 @@
       "Long distance",
       "Upgrading"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/avocet 10x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "10",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "No",
+      "Close focus distance": "3-3.5m",
+      "Field of view (degrees)": "5.8",
+      "Field of view (m/1000m)": "101",
+      "Eye relief (mm)": "16.9",
+      "Exit pupil (mm)": "4.2",
+      "Waterproof": "Yes",
+      "Nitrogen filled": "Yes",
+      "Weight (g)": "615",
+      "Dimensions (mm)": "L150 x W127",
+      "Warranty": "5 years"
+    }
   },
   {
     "id": "rspb-harrier-8x32",
@@ -131,8 +239,23 @@
       "All-round birding",
       "Lightweight"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/harrier 8x32.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8",
+      "Objective lens diameter (mm)": "32",
+      "ED lens": "No",
+      "Close focus distance": "2m",
+      "Field of view (degrees)": "7.8",
+      "Field of view (m/1000m)": "137",
+      "Eye relief (mm)": "15.6",
+      "Exit pupil (mm)": "4",
+      "Waterproof": "Yes",
+      "Nitrogen filled": "Yes",
+      "Weight (g)": "509",
+      "Dimensions (mm)": "L122 x W120",
+      "Warranty": "10 years"
+    }
   },
   {
     "id": "rspb-harrier-8x42",
@@ -148,8 +271,23 @@
       "Upgrading",
       "Open habitats"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/harrier 8x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "No",
+      "Close focus distance": "2m",
+      "Field of view (degrees)": "8.1",
+      "Field of view (m/1000m)": "142",
+      "Eye relief (mm)": "17.2",
+      "Exit pupil (mm)": "5.25",
+      "Waterproof": "Yes",
+      "Nitrogen filled": "Yes",
+      "Weight (g)": "692",
+      "Dimensions (mm)": "L122 x W125",
+      "Warranty": "10 years"
+    }
   },
   {
     "id": "rspb-harrier-10x42",
@@ -164,8 +302,23 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/harrier 10x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "10",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "No",
+      "Close focus distance": "2m",
+      "Field of view (degrees)": "6.5",
+      "Field of view (m/1000m)": "114",
+      "Eye relief (mm)": "15.2",
+      "Exit pupil (mm)": "4.2",
+      "Waterproof": "Yes",
+      "Nitrogen filled": "Yes",
+      "Weight (g)": "674",
+      "Dimensions (mm)": "L122 x W125",
+      "Warranty": "10 years"
+    }
   },
   {
     "id": "rspb-harrierx-8x32",
@@ -181,8 +334,23 @@
       "Lightweight",
       "Upgrading"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/harrier x 8x32.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8",
+      "Objective lens diameter (mm)": "32",
+      "ED lens": "Yes",
+      "Close focus distance": "2m",
+      "Field of view (degrees)": "8.3",
+      "Field of view (m/1000m)": "145",
+      "Eye relief (mm)": "16.9",
+      "Exit pupil (mm)": "4",
+      "Waterproof": "Yes",
+      "Nitrogen filled": "Yes",
+      "Weight (g)": "524",
+      "Dimensions (mm)": "L125 x W120",
+      "Warranty": "10 years"
+    }
   },
   {
     "id": "rspb-harrierx-8x42",
@@ -198,8 +366,23 @@
       "All-round birding",
       "Upgrading"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/harrier x 8x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "Yes",
+      "Close focus distance": "2m",
+      "Field of view (degrees)": "8.1",
+      "Field of view (m/1000m)": "142",
+      "Eye relief (mm)": "18.4",
+      "Exit pupil (mm)": "5.2",
+      "Waterproof": "Yes",
+      "Nitrogen filled": "Yes",
+      "Weight (g)": "716",
+      "Dimensions (mm)": "L143 x W120",
+      "Warranty": "10 years"
+    }
   },
   {
     "id": "rspb-harrierx-10x42",
@@ -215,8 +398,23 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/harrier x 10x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "10",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "Yes",
+      "Close focus distance": "2m",
+      "Field of view (degrees)": "6.6",
+      "Field of view (m/1000m)": "116",
+      "Eye relief (mm)": "16.7",
+      "Exit pupil (mm)": "4.2",
+      "Waterproof": "Yes",
+      "Nitrogen filled": "Yes",
+      "Weight (g)": "693",
+      "Dimensions (mm)": "L143 x W120",
+      "Warranty": "10 years"
+    }
   },
   {
     "id": "rspb-buzzard-8x42",
@@ -232,8 +430,24 @@
       "All-round birding",
       "Low light"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/buzzard 8x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8x",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "Yes",
+      "Close focus distance (m)": "2",
+      "Field of view (degrees)": "8.1",
+      "Field of view (m/1000m)": "142",
+      "Eye relief (mm)": "18.4",
+      "Exit pupil (mm)": "5.3",
+      "Interpupillary distance (mm)": "56-76",
+      "Waterproof": "Yes",
+      "Nitrogen-filled": "Yes",
+      "Weight (g)": "740",
+      "Dimensions L x W x H (mm)": "143 x 135 x 53",
+      "Warranty": "10 years"
+    }
   },
   {
     "id": "rspb-buzzard-10x42",
@@ -249,8 +463,24 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/buzzard 10x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "10x",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "Yes",
+      "Close focus distance (m)": "2",
+      "Field of view (degrees)": "6.6",
+      "Field of view (m/1000m)": "116",
+      "Eye relief (mm)": "16.7",
+      "Exit pupil (mm)": "4.2",
+      "Interpupillary distance (mm)": "56-76",
+      "Waterproof": "Yes",
+      "Nitrogen-filled": "Yes",
+      "Weight (g)": "715",
+      "Dimensions L x W x H (mm)": "143 x 135 x 53",
+      "Warranty": "10 years"
+    }
   },
   {
     "id": "rspb-sparrowhawk-8.5x42",
@@ -266,8 +496,24 @@
       "All-round birding",
       "Low light"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/sparrowhawk 8.5x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "8.5x",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "Yes",
+      "Close focus distance (m)": "2",
+      "Field of view (degrees)": "8",
+      "Field of view (m/1000m)": "140",
+      "Eye relief (mm)": "16.7",
+      "Exit pupil (mm)": "4.9",
+      "Interpupillary distance (mm)": "56-74",
+      "Waterproof": "Yes",
+      "Nitrogen-filled": "Yes",
+      "Weight (g)": "700",
+      "Dimensions L x W x H (mm)": "145 x 125 x 50",
+      "Warranty": "10 years"
+    }
   },
   {
     "id": "rspb-sparrowhawk-10x42",
@@ -283,7 +529,23 @@
       "Open habitats",
       "Long distance"
     ],
-    "image": "",
-    "staff_notes": ""
+    "image": "Images/sparrowhawk 10x42.jpg",
+    "staff_notes": "",
+    "specs": {
+      "Magnification": "10x",
+      "Objective lens diameter (mm)": "42",
+      "ED lens": "Yes",
+      "Close focus distance (m)": "1.5",
+      "Field of view (degrees)": "6.6",
+      "Field of view (m/1000m)": "115",
+      "Eye relief (mm)": "17.8",
+      "Exit pupil (mm)": "4.2",
+      "Interpupillary distance (mm)": "56-74",
+      "Waterproof": "Yes",
+      "Nitrogen-filled": "Yes",
+      "Weight (g)": "700",
+      "Dimensions L x W x H (mm)": "145 x 125 x 50",
+      "Warranty": "10 years"
+    }
   }
 ]
