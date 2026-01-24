@@ -750,3 +750,10 @@ code {
     width: 42%;
   }
 }
+/* Touch-friendly press feedback */
+a:active,
+.button:active,
+.card:active {
+  transform: scale(0.98);
+  opacity: 0.95;
+}
