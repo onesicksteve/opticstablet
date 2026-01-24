@@ -1,32 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Browse</title>
-  <link rel="stylesheet" href="css/screen2.css" />
+  <meta charset="UTF-8" />
+  <title>Browse binoculars</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="topbar">
-    <a class="btn ghost" href="index.html">← Home</a>
-    <h1 id="pageTitle">Browse</h1>
-    <a class="btn ghost" href="compare.html" id="compareLink">Compare <span id="compareCount" class="pill">0</span></a>
-  </header>
+  <a href="index.html">← Home</a>
+  <h1>Browse binoculars</h1>
 
-  <section class="controls">
-    <label class="toggle">
-      <input type="checkbox" id="rewardsToggle" />
-      <span>Show rewards value</span>
-    </label>
+  <label>
+    <input type="checkbox" id="rewardsToggle">
+    Show rewards value
+  </label>
 
-    <input id="searchInput" class="search" type="search" placeholder="Search by brand or model" />
-    <div class="meta">
-      <span id="itemCount">0 item(s)</span>
-    </div>
-  </section>
+  <input id="search" placeholder="Search by brand or model">
 
-  <main id="grid" class="grid"></main>
+  <div id="count"></div>
+  <div id="products"></div>
 
-  <script src="js/browse.js" defer></script>
+  <script src="js/browse.js"></script>
 </body>
 </html>
