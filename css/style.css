@@ -599,14 +599,14 @@ code {
 }
 
 /* =========================
-   Home cards – kiosk friendly
+   Home cards – clean kiosk style
 ========================= */
 
 .home-grid {
   margin-top: 28px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  gap: 22px;
 }
 
 @media (max-width: 950px) {
@@ -616,22 +616,23 @@ code {
 }
 
 .home-card {
+  text-decoration: none;            /* kill underlines */
+  color: #ffffff;
+
   display: flex;
   flex-direction: column;
+  align-items: center;              /* center everything */
   justify-content: center;
-  gap: 18px;
+  gap: 16px;
 
-  padding: 28px;
-  min-height: 190px;
+  padding: 30px;
+  min-height: 200px;
 
-  border-radius: 22px;
-  text-decoration: none;
-  color: inherit;
-
+  border-radius: 24px;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.3);
 
-  box-shadow: 0 14px 34px rgba(0,0,0,0.28);
   transition: transform 140ms ease, background 140ms ease;
 }
 
@@ -640,29 +641,37 @@ code {
   background: rgba(255,255,255,0.12);
 }
 
+/* Icon */
 .home-card-icon {
   width: 64px;
   height: 64px;
   display: grid;
   place-items: center;
-  border-radius: 18px;
 
+  border-radius: 18px;
   background: rgba(0,0,0,0.25);
   border: 1px solid rgba(255,255,255,0.12);
 
   font-size: 30px;
 }
 
+/* Text */
+.home-card-body {
+  text-align: center;
+}
+
 .home-card-body h2 {
   margin: 0;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
+  text-decoration: none;            /* belt + braces */
 }
 
 .home-card-body p {
   margin: 6px 0 0;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 1.45;
   opacity: 0.95;
+  text-decoration: none;
 }
