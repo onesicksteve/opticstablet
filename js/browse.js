@@ -17,7 +17,6 @@
     grid: document.getElementById("grid"),
   };
 
-  // Fail fast if the page is missing required IDs
   if (!els.grid || !els.searchInput || !els.itemCount) {
     console.error("browse.html is missing required elements (grid/searchInput/itemCount).");
     return;
@@ -57,7 +56,7 @@
 
   function safeImgSrc(src) {
     if (!src) return "";
-    return encodeURI(src); // keeps slashes, encodes spaces
+    return encodeURI(src);
   }
 
   function placeholderDataUri(label = "No image") {
@@ -111,7 +110,6 @@
     };
   }
 
-  // Determine category from URL (supports both legacy cat= and current category=)
   const categoryRaw = getParam("category") || getParam("cat") || "binoculars";
   const categoryKey = slug(categoryRaw);
 
@@ -180,7 +178,6 @@
 
     return `
       <article class="card">
-        <!-- ✅ PHOTO IS NOW CLICKABLE -->
         <a class="card-image" href="${productUrl}">
           <img
             src="${img}"
@@ -221,58 +218,49 @@
     document.querySelectorAll('input[type="checkbox"][data-compare-id]').forEach(cb => {
       cb.addEventListener("change", (e) => {
         const id = String(e.target.getAttribute("data-compare-id"));
-        const ids = getCompareIds();
+        let ids = getCompareIds();
 
         if (e.target.checked) {
-          if (!ids.includes(id)) ids.push(id);
+          if (!ids.includes(id)) {
+            if (ids.length >= 2) {
+              e.target.checked = false;
+              alert("Compare is limited to 2 items. Remove one first.");
+              return;
+            }
+            ids.push(id);
+          }
         } else {
-          const idx = ids.indexOf(id);
-          if (idx >= 0) ids.splice(idx, 1);
+          ids = ids.filter(x => String(x) !== id);
         }
 
         setCompareIds(ids);
         updateCompareCount();
+
+        // ✅ Auto-open compare when 2 items selected
+        if (e.target.checked && ids.length === 2) {
+          window.location.href = "compare.html";
+        }
       });
     });
   }
 
   function render() {
-    try {
-      const q = (els.searchInput.value || "").trim().toLowerCase();
-      const rewardsShown = !!els.rewardsToggle?.checked;
+    const q = (els.searchInput.value || "").trim().toLowerCase();
+    const rewardsShown = !!els.rewardsToggle?.checked;
 
-      const filtered = allProducts
-        .filter(matchesCategory)
-        .filter(p => matchesQuery(p, q));
+    const filtered = allProducts
+      .filter(matchesCategory)
+      .filter(p => matchesQuery(p, q));
 
-      els.itemCount.textContent = String(filtered.length);
+    els.itemCount.textContent = String(filtered.length);
 
-      els.grid.innerHTML = filtered.map(p => buildCard(p, rewardsShown)).join("");
+    els.grid.innerHTML = filtered.map(p => buildCard(p, rewardsShown)).join("");
 
-      wireCompareToggles();
-      updateCompareCount();
-
-      if (filtered.length === 0) {
-        els.grid.innerHTML = `
-          <div class="card error" style="padding:16px;">
-            <h3 style="margin:0 0 8px 0;">No products found</h3>
-            <div class="muted">Try a different search, or check the category link.</div>
-          </div>
-        `;
-      }
-    } catch (err) {
-      console.error(err);
-      els.grid.innerHTML = `
-        <div class="card error" style="padding:16px;">
-          <h3 style="margin:0 0 8px 0;">Browse page error</h3>
-          <div class="muted">Open DevTools → Console to see the error.</div>
-        </div>
-      `;
-    }
+    wireCompareToggles();
+    updateCompareCount();
   }
 
   async function init() {
-    // Restore toggle state
     if (els.rewardsToggle) {
       els.rewardsToggle.checked = getRewardsShown();
       els.rewardsToggle.addEventListener("change", () => {
