@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product</title>
+  <link rel="stylesheet" href="css/screen2.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="btn ghost" href="#" id="backLink">← Back</a>
+    <h1 id="productTitle">Product</h1>
+    <a class="btn ghost" href="compare.html" id="compareLink">Compare <span id="compareCount" class="pill">0</span></a>
+  </header>
+
+  <main class="product">
+    <section class="product-hero">
+      <img id="productImg" class="product-img" alt="" />
+      <div class="product-summary">
+        <div class="price" id="productPrice"></div>
+        <div class="kv">
+          <div><strong>Warranty:</strong> <span id="productWarranty"></span></div>
+          <div><strong>Value:</strong> <span id="productValue"></span></div>
+          <div><strong>Weight:</strong> <span id="productWeight"></span></div>
+        </div>
+
+        <div id="tagRow" class="tag-row"></div>
+
+        <div class="row">
+          <button class="btn" id="addCompareBtn">Add to compare</button>
+          <label class="toggle">
+            <input type="checkbox" id="rewardsToggle" />
+            <span>Show rewards value</span>
+          </label>
+        </div>
+
+        <div id="rewardsInfo" class="rewards hidden"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Description</h2>
+      <p id="desc"></p>
+    </section>
+
+    <section class="card">
+      <h2>Key features</h2>
+      <ul id="features"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Specs</h2>
+      <div class="specs-wrap">
+        <table class="specs" id="specsTable"></table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/product.js" defer></script>
+</body>
+</html>

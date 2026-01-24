@@ -1,0 +1,1 @@
+Upload the contents of this zip to your GitHub repo root. Ensure GitHub Pages is enabled.\n\nFolders must stay exactly: css, js, data, Images\n\nAdd your product images into Images/ using filenames exactly as in data/products.json (with .jpg).\n

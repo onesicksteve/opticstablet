@@ -1,0 +1,1 @@
+Put your .jpg images here. Filenames must match the 'image' field in data/products.json exactly.\n
