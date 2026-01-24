@@ -6,6 +6,13 @@
     info: document.getElementById("compareInfo"),
     wrap: document.getElementById("compareWrap"),
     backToBrowse: document.getElementById("backToBrowse"),
+
+  const SPEC_ALIASES = {
+  "close focus": ["close focus", "close focus (m)", "close_focus", "close_focus_m"],
+  "nitrogen filled": ["nitrogen filled", "nitrogen-filled", "nitrogen"],
+  "dimensions": ["dimensions", "dimensions mm", "dimensions_mm"],
+};
+
   };
 
   function getCompareIds() {
