@@ -34,6 +34,21 @@ function normaliseSpecKey(key) {
     }
   }
 
+function normaliseSpecs(specs) {
+  const result = {};
+
+  for (const [key, value] of Object.entries(specs || {})) {
+    const normalKey = normaliseSpecKey(key);
+
+    if (value && !result[normalKey]) {
+      result[normalKey] = value;
+    }
+  }
+
+  return result;
+}
+
+  
   return clean;
 }
 
