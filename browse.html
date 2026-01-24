@@ -6,10 +6,49 @@
   <title>Browse</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
-  <main class="wrap">
-    <a href="index.html">← Home</a>
-    <h1>Browse (placeholder)</h1>
+<body class="browse">
+  <header class="wrap browseHeader">
+    <div class="topBar">
+      <a class="btn secondary" href="index.html" aria-label="Back to home">← Home</a>
+      <h1 id="pageTitle" class="browseTitle">Browse</h1>
+
+      <label class="toggle" title="Staff mode">
+        <input type="checkbox" id="modeToggle" />
+        <span>Staff mode</span>
+      </label>
+    </div>
+
+    <div class="controls">
+      <input id="search" type="search" placeholder="Search by brand or model" />
+    </div>
+  </header>
+
+  <main class="wrap browseMain">
+    <div id="status" class="muted small"></div>
+
+    <div class="browseLayout">
+      <section>
+        <div id="grid" class="productGrid" aria-label="Products"></div>
+      </section>
+
+      <!-- Compare tray: hidden until first selection -->
+      <aside id="compareTray" class="compareTray" aria-label="Compare tray" hidden>
+        <div class="compareTrayInner">
+          <div class="row">
+            <h2 class="trayTitle">Compare <span id="compareCount">0</span>/2</h2>
+            <button id="clearCompare" class="btn secondary" type="button">Clear</button>
+          </div>
+
+          <p id="trayHint" class="muted small">Select up to two products to compare.</p>
+
+          <div id="trayItems" class="trayItems"></div>
+
+          <button id="goCompare" class="btn" type="button" disabled>Compare</button>
+        </div>
+      </aside>
+    </div>
   </main>
+
+  <script src="js/browse.js"></script>
 </body>
 </html>

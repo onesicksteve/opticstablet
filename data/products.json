@@ -1,0 +1,147 @@
+[
+  {
+    "id": "rspb-skylark-8x25",
+    "category": "compact-binoculars",
+    "brand": "RSPB",
+    "model": "Skylark 8x25",
+    "price_gbp": 0,
+    "warranty": "\u2014",
+    "value_for_money": "\u2014",
+    "weight_g": 0,
+    "best_for": [
+      "Travel",
+      "Lightweight",
+      "Beginners"
+    ],
+    "image": "",
+    "staff_notes": ""
+  },
+  {
+    "id": "rspb-harrier-8x42",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "Harrier 8x42",
+    "price_gbp": 0,
+    "warranty": "\u2014",
+    "value_for_money": "\u2014",
+    "weight_g": 0,
+    "best_for": [
+      "Beginners",
+      "All-round birding"
+    ],
+    "image": "",
+    "staff_notes": ""
+  },
+  {
+    "id": "rspb-harrier-10x42",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "Harrier 10x42",
+    "price_gbp": 0,
+    "warranty": "\u2014",
+    "value_for_money": "\u2014",
+    "weight_g": 0,
+    "best_for": [
+      "Open habitats",
+      "Long distance"
+    ],
+    "image": "",
+    "staff_notes": ""
+  },
+  {
+    "id": "rspb-harrier-x-8x42",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "Harrier X 8x42",
+    "price_gbp": 0,
+    "warranty": "\u2014",
+    "value_for_money": "\u2014",
+    "weight_g": 0,
+    "best_for": [
+      "All-round birding",
+      "Upgrading"
+    ],
+    "image": "",
+    "staff_notes": ""
+  },
+  {
+    "id": "rspb-avocet-8x32",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "Avocet 8x32",
+    "price_gbp": 0,
+    "warranty": "\u2014",
+    "value_for_money": "\u2014",
+    "weight_g": 0,
+    "best_for": [
+      "Lightweight",
+      "All-round birding"
+    ],
+    "image": "",
+    "staff_notes": ""
+  },
+  {
+    "id": "rspb-avocet-8x42",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "Avocet 8x42",
+    "price_gbp": 0,
+    "warranty": "\u2014",
+    "value_for_money": "\u2014",
+    "weight_g": 0,
+    "best_for": [
+      "All-round birding",
+      "Low light"
+    ],
+    "image": "",
+    "staff_notes": ""
+  },
+  {
+    "id": "rspb-avocet-10x42",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "Avocet 10x42",
+    "price_gbp": 0,
+    "warranty": "\u2014",
+    "value_for_money": "\u2014",
+    "weight_g": 0,
+    "best_for": [
+      "Open habitats",
+      "Long distance"
+    ],
+    "image": "",
+    "staff_notes": ""
+  },
+  {
+    "id": "rspb-buzzard-8x42",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "Buzzard 8x42",
+    "price_gbp": 0,
+    "warranty": "\u2014",
+    "value_for_money": "\u2014",
+    "weight_g": 0,
+    "best_for": [
+      "Low light",
+      "Upgrading"
+    ],
+    "image": "",
+    "staff_notes": ""
+  },
+  {
+    "id": "rspb-sparrowhawk-8x42",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "Sparrowhawk 8x42",
+    "price_gbp": 0,
+    "warranty": "\u2014",
+    "value_for_money": "\u2014",
+    "weight_g": 0,
+    "best_for": [
+      "Low light",
+      "Long sessions"
+    ],
+    "image": "",
+    "staff_notes": ""
+  }
+]
