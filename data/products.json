@@ -17,18 +17,30 @@
     "staff_notes": ""
   },
   {
+    [
+  {
+    "id": "rspb-harrier-8x32",
+    "category": "binoculars",
+    "brand": "RSPB",
+    "model": "Harrier 8x32",
+    "price_gbp": 230,
+    "warranty": "10-year warranty",
+    "value_for_money": "Strong value for a lighter carry",
+    "weight_g": 509,
+    "best_for": ["All-round birding", "Lightweight"],
+    "image": "",
+    "staff_notes": ""
+  },
+  {
     "id": "rspb-harrier-8x42",
     "category": "binoculars",
     "brand": "RSPB",
     "model": "Harrier 8x42",
-    "price_gbp": 0,
-    "warranty": "\u2014",
-    "value_for_money": "\u2014",
-    "weight_g": 0,
-    "best_for": [
-      "Beginners",
-      "All-round birding"
-    ],
+    "price_gbp": 240,
+    "warranty": "10-year warranty",
+    "value_for_money": "Strong value for everyday birding",
+    "weight_g": 692,
+    "best_for": ["All-round birding", "Upgrading", "Open habitats"],
     "image": "",
     "staff_notes": ""
   },
@@ -37,16 +49,16 @@
     "category": "binoculars",
     "brand": "RSPB",
     "model": "Harrier 10x42",
-    "price_gbp": 0,
-    "warranty": "\u2014",
-    "value_for_money": "\u2014",
-    "weight_g": 0,
-    "best_for": [
-      "Open habitats",
-      "Long distance"
-    ],
+    "price_gbp": 250,
+    "warranty": "10-year warranty",
+    "value_for_money": "Affordable option for distance viewing",
+    "weight_g": 674,
+    "best_for": ["Open habitats", "Long distance"],
     "image": "",
     "staff_notes": ""
+  }
+]
+
   },
   {
     "id": "rspb-harrier-x-8x42",
