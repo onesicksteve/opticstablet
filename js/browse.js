@@ -14,10 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   if (toggleRewards) {
-    toggleRewards.addEventListener("change", () => {
-      showRewards = toggleRewards.checked;
-      render();
-    });
+  toggleRewards.addEventListener("change", () => {
+    showRewards = toggleRewards.checked;
+    render();
+  });
+}
+
   }
 
   if (search) {
