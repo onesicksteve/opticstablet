@@ -1,0 +1,19 @@
+body {
+  font-family: system-ui, sans-serif;
+  background: #0f3b2e;
+  color: #fff;
+  padding: 20px;
+}
+
+a { color: #b7f0c8; }
+
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 8px;
+}
+
+.price { font-weight: bold; }
+
+.rewards { color: #9fe6b8; }
