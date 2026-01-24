@@ -15,8 +15,19 @@ body{
   border-radius:20px;
   padding:20px;
   display:flex;
+
+  position: relative;     /* IMPORTANT */
+  overflow: hidden;       /* IMPORTANT */
 }
-.tileInner{display:flex;flex-direction:column;justify-content:space-between;width:100%;}
+.tileInner{
+  position: relative;     /* IMPORTANT */
+  z-index: 2;             /* IMPORTANT: keep text above icon */
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  width:100%;
+}
+
 .tileText h2{margin:0 0 10px;font-size:26px;}
 .tileText p{margin:0;color:#b9cfc3;font-size:16px;}
 
@@ -24,26 +35,26 @@ body{
 
 .tileIcon{
   position:absolute;
-  inset: -10% -10% -10% -10%;
-  z-index:1;
-  opacity: .22; /* adjust between .14–.22 if needed */
-  background-repeat: no-repeat;
+  inset: 0;
+  z-index: 1;
+  opacity: .18;                 /* try .18 first */
+  background-repeat:no-repeat;
   background-position: right 20% center;
-  background-size: 72%;
-  pointer-events: none;
+  background-size: 75%;
+  pointer-events:none;
 }
 
-/* Compact binoculars silhouette */
 .tile-compact .tileIcon{
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cg fill='%236fbf8e'%3E%3Cpath d='M240 210c-38 0-69 31-69 69v42c0 38 31 69 69 69h40c38 0 69-31 69-69v-42c0-38-31-69-69-69h-40zm0 34h40c19 0 35 16 35 35v42c0 19-16 35-35 35h-40c-19 0-35-16-35-35v-42c0-19 16-35 35-35z'/%3E%3Cpath d='M520 210c-38 0-69 31-69 69v42c0 38 31 69 69 69h40c38 0 69-31 69-69v-42c0-38-31-69-69-69h-40zm0 34h40c19 0 35 16 35 35v42c0 19-16 35-35 35h-40c-19 0-35-16-35-35v-42c0-19 16-35 35-35z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* Full-size binoculars silhouette */
 .tile-binos .tileIcon{
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cg fill='%236fbf8e'%3E%3Cpath d='M210 165c-54 0-98 44-98 98v78c0 54 44 98 98 98h68c54 0 98-44 98-98v-78c0-54-44-98-98-98h-68zm0 44h68c30 0 54 24 54 54v78c0 30-24 54-54 54h-68c-30 0-54-24-54-54v-78c0-30 24-54 54-54z'/%3E%3Cpath d='M522 165c-54 0-98 44-98 98v78c0 54 44 98 98 98h68c54 0 98-44 98-98v-78c0-54-44-98-98-98h-68zm0 44h68c30 0 54 24 54 54v78c0 30-24 54-54 54h-68c-30 0-54-24-54-54v-78c0-30 24-54 54-54z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* Spotting scope silhouette */
 .tile-scopes .tileIcon{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cg fill='%236fbf8e'%3E%3Cpath d='M220 210c0-22 18-40 40-40h240c22 0 40 18 40 40v40c0 22-18 40-40 40H260c-22 0-40-18-40-40v-40z'/%3E%3Cpath d='M360 290h40l80 230h-36l-64-168-64 168h-36l80-230z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cg fill='%236fbf8e'%3E%3Cpath d='M220 210c0-22 18-40 40-40h240c22 0 40 18 40 40v40c0 22-18 40-40 40H260c-22 0-40-18-40-40v-40z'/%3E%3Cpath d='M360 290h40l80 230h-36l-64-168-64 168h-36l80-230z'/%3E%3C/g%3E%3C/svg%3E");
 }
