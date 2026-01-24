@@ -21,10 +21,17 @@
 
     <div id="compareWrap"></div>
   </div>
-
-  <script src="js/compare.js"></script>
+ 
   <script src="js/kiosk-timeout.js"></script>
   <script src="js/browse.js"></script>
+  <script src="js/compare.js"></script>
+<script>
+  // Clear compare selections when leaving the compare page
+  window.addEventListener("pagehide", () => {
+    localStorage.removeItem("rspb_compare_ids");
+  });
+</script>
+
 </body>
 
 </body>
