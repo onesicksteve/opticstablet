@@ -25,6 +25,19 @@
     }
   }
 
+function normaliseSpecKey(key) {
+  const clean = key.toLowerCase().replace(/[_-]/g, " ").trim();
+
+  for (const canonical in SPEC_ALIASES) {
+    if (SPEC_ALIASES[canonical].includes(clean)) {
+      return canonical;
+    }
+  }
+
+  return clean;
+}
+
+
   function setCompareIds(ids) {
     localStorage.setItem(STORAGE_COMPARE, JSON.stringify(ids.map(String)));
   }
