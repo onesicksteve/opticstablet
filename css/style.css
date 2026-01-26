@@ -666,3 +666,38 @@ body:not(.home) .home-footer{
   font-size: 16px;
   font-weight: 900;
 }
+
+
+/* ---------- Product specs grid ---------- */
+.specs-grid{
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.spec-row{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 140px;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.spec-label{
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+.spec-value{
+  text-align: right;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px){
+  .spec-row{ grid-template-columns: minmax(0, 1fr) 120px; }
+}
