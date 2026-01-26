@@ -96,11 +96,11 @@
   function renderSpecs(rows) {
     if (!rows.length) return `<div class="muted">No specifications listed.</div>`;
     return `
-      <div class="specs">
+      <div class="specs-grid">
         ${rows.map(r => `
           <div class="spec-row">
-            <div class="spec-k">${escapeHtml(r.k)}</div>
-            <div class="spec-v">${escapeHtml(r.v)}</div>
+            <div class="spec-label">${escapeHtml(r.k)}</div>
+            <div class="spec-value">${escapeHtml(r.v)}</div>
           </div>
         `).join("")}
       </div>
