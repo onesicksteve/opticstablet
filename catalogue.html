@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>RSPB Conwy Optics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e1210;
+      --surface: #171d19;
+      --surface2: #1f2921;
+      --border: #2a3830;
+      --accent: #5aaa72;
+      --accent-dim: #2d6e41;
+      --text: #e8ede9;
+      --text-muted: #7a9182;
+      --text-dim: #4a6356;
+      --tag-bg: rgba(90,170,114,0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: 0.04em; }
+    .logo span { color: var(--accent); }
+    .product-count { font-size: 13px; color: var(--text-muted); }
+
+    /* FILTER ROWS */
+    .filters {
+      position: sticky;
+      top: 57px;
+      z-index: 99;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 28px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .filter-row.cat-row { border-bottom: 1px solid var(--border); }
+
+    .filter-row.brand-row {
+      background: var(--surface2);
+      max-height: 56px;
+      opacity: 1;
+      overflow: hidden;
+      transition: max-height 0.25s ease, opacity 0.2s ease, padding 0.2s ease;
+      padding-top: 8px;
+      padding-bottom: 10px;
+    }
+
+    .filter-row.brand-row.hidden {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .filter-btn {
+      flex-shrink: 0;
+      padding: 7px 16px;
+      border-radius: 40px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .filter-btn:active { transform: scale(0.96); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #0e1210; font-weight: 500; }
+    .filter-btn.brand-btn.active { background: transparent; border-color: var(--accent); color: var(--accent); font-weight: 500; }
+
+    /* SEARCH */
+    .search-wrap { padding: 14px 28px 10px; }
+
+    .search-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 16px 11px 42px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237a9182' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 14px center;
+    }
+
+    .search-input:focus { border-color: var(--accent-dim); }
+    .search-input::placeholder { color: var(--text-dim); }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      padding: 12px 28px 40px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:active { transform: scale(0.98); border-color: var(--accent-dim); }
+
+    /* Card image area — product photo takes full space, logo sits bottom-right */
+    .card-img {
+      height: 160px;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-img .product-photo {
+      max-height: 140px;
+      max-width: 88%;
+      object-fit: contain;
+    }
+
+    .no-img {
+      opacity: 0.18;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Brand logo badge — bottom-right corner of card image */
+    .card-brand-logo {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      height: 22px;
+      max-width: 80px;
+      object-fit: contain;
+      object-position: right center;
+      opacity: 0.75;
+      
+    }
+
+    .card-body {
+      padding: 13px 15px 15px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .cat-tag {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: var(--tag-bg);
+      padding: 2px 9px;
+      border-radius: 20px;
+    }
+
+    .brand-label {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .card-model {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: auto;
+      padding-top: 10px;
+    }
+
+    .card-arrow { color: var(--text-dim); }
+
+    /* EMPTY */
+    .empty { display: none; padding: 60px 28px; text-align: center; color: var(--text-dim); }
+    .empty.visible { display: block; }
+    .empty p { font-size: 15px; margin-top: 8px; }
+
+    /* DETAIL PAGE */
+    #detail-page {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 200;
+      overflow-y: auto;
+    }
+
+    #detail-page.visible { display: block; }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .back-btn:active { border-color: var(--accent); color: var(--accent); }
+
+    .dh-info { flex: 1; min-width: 0; }
+    .dh-brand { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .dh-model { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Detail logo in header */
+    .dh-logo {
+      height: 28px;
+      max-width: 110px;
+      object-fit: contain;
+      object-position: right center;
+      opacity: 0.7;
+      
+      flex-shrink: 0;
+    }
+
+    .detail-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .detail-img {
+      grid-column: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-img img.product-photo { max-width: 85%; max-height: 240px; object-fit: contain; }
+
+    /* Logo watermark bottom-right on detail image panel */
+    .detail-img .brand-logo-watermark {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      height: 28px;
+      max-width: 120px;
+      object-fit: contain;
+      object-position: right center;
+      opacity: 0.35;
+      
+    }
+
+    .no-img-lg { opacity: 0.2; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+    .detail-info {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .detail-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .detail-cat-tag {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: var(--tag-bg);
+      padding: 3px 11px;
+      border-radius: 20px;
+    }
+
+    /* Logo on detail info panel */
+    .detail-info-logo {
+      height: 32px;
+      max-width: 130px;
+      object-fit: contain;
+      object-position: left center;
+      opacity: 0.8;
+      
+      margin-top: 4px;
+    }
+
+    .detail-brand-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); }
+
+    .detail-name { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 700; line-height: 1.1; }
+
+    .detail-desc {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--text-muted);
+      border-left: 2px solid var(--accent-dim);
+      padding-left: 14px;
+    }
+
+    /* SPECS */
+    .specs-panel {
+      grid-column: 1 / -1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .specs-title {
+      padding: 14px 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .specs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+
+    .spec-item {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    .spec-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 3px; }
+    .spec-value { font-size: 14px; font-weight: 500; color: var(--text); }
+
+    /* COMPARE BUTTON ON CARD */
+    .card { position: relative; }
+
+    .compare-btn {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 5;
+      transition: all 0.15s;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .compare-btn:active { transform: scale(0.9); }
+    .compare-btn.selected { background: var(--accent); border-color: var(--accent); color: #0e1210; }
+    .card.compare-selected { border-color: var(--accent); }
+
+    /* COMPARE BAR — sticky at bottom */
+    #compare-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--accent-dim);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 150;
+      transform: translateY(100%);
+      transition: transform 0.25s ease;
+    }
+
+    #compare-bar.visible { transform: translateY(0); }
+
+    .compare-bar-slots {
+      display: flex;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .compare-slot {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 44px;
+    }
+
+    .compare-slot.filled {
+      border-color: var(--accent-dim);
+      border-style: solid;
+    }
+
+    .compare-slot-name {
+      font-size: 13px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .compare-slot-remove {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 2px;
+      flex-shrink: 0;
+      line-height: 1;
+      font-size: 16px;
+    }
+
+    .compare-slot-remove:active { color: var(--accent); }
+
+    .compare-go-btn {
+      background: var(--accent);
+      border: none;
+      color: #0e1210;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 22px;
+      border-radius: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: opacity 0.15s;
+    }
+
+    .compare-go-btn:disabled { opacity: 0.35; cursor: default; }
+    .compare-go-btn:not(:disabled):active { opacity: 0.8; }
+
+    /* COMPARE PAGE */
+    #compare-page {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 300;
+      overflow-y: auto;
+    }
+
+    #compare-page.visible { display: block; }
+
+    .compare-page-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+
+    .compare-page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .compare-table-wrap {
+      padding: 24px 28px 60px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .compare-products-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 1fr;
+      gap: 0;
+      margin-bottom: 24px;
+    }
+
+    .compare-col-header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .compare-col-header img.cp-logo {
+      height: 24px;
+      max-width: 110px;
+      object-fit: contain;
+      opacity: 0.75;
+      
+    }
+
+    .compare-col-brand {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+
+    .compare-col-model {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .compare-col-img {
+      width: 80px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .compare-col-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    /* spec comparison table */
+    .compare-spec-table {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .compare-spec-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare-spec-row:last-child { border-bottom: none; }
+
+    .compare-spec-key {
+      padding: 11px 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-dim);
+      background: var(--surface2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+    }
+
+    .compare-spec-val {
+      padding: 11px 16px;
+      font-size: 14px;
+      color: var(--text);
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+    }
+
+    .compare-spec-val:last-child { border-right: none; }
+
+    /* highlight differences */
+    .compare-spec-val.diff {
+      background: rgba(90, 170, 114, 0.08);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .compare-spec-val.missing { color: var(--text-dim); font-style: italic; }
+
+    .diff-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .diff-swatch {
+      width: 14px; height: 14px;
+      border-radius: 3px;
+      background: rgba(90,170,114,0.18);
+      border: 1px solid var(--accent-dim);
+      flex-shrink: 0;
+    }
+
+    /* compare btn on detail page */
+    .detail-compare-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: auto;
+    }
+
+    .detail-compare-btn.selected {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .detail-compare-btn:active { opacity: 0.7; }
+
+    /* Brand-specific logo overrides */
+    /* Nikon — yellow background, show as-is but small */
+    img[src="logo-nikon.png"] {
+      filter: none !important;
+      opacity: 0.9 !important;
+    }
+    /* Zeiss — blue background, invert looks wrong; show as-is */
+    img[src="logo-zeiss.png"] {
+      filter: none !important;
+      opacity: 0.85 !important;
+    }
+    /* Kowa — white oval on black, invert gives black on white — show as-is */
+    img[src="logo-kowa.png"] {
+      filter: none !important;
+      opacity: 0.85 !important;
+    }
+    /* Leica — red circle on black, keep colours */
+    img[src="logo-leica.png"] {
+      filter: none !important;
+      opacity: 0.85 !important;
+    }
+    /* RSPB — coloured circle, keep colours */
+    img[src="logo-rspb.png"] {
+      filter: none !important;
+      opacity: 0.9 !important;
+    }
+
+    /* HOME SCREEN */
+    #home-page {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .home-header {
+      padding: 40px 28px 28px;
+      text-align: center;
+    }
+
+    .home-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .home-logo span { color: var(--accent); }
+
+    .home-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .home-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 28px 28px 40px;
+      flex: 1;
+      justify-content: center;
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .home-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s, background 0.2s;
+      text-align: left;
+      width: 100%;
+    }
+
+    .home-btn:active { transform: scale(0.97); border-color: var(--accent-dim); background: var(--surface2); }
+
+    .home-btn-left { display: flex; flex-direction: column; gap: 4px; }
+
+    .home-btn-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .home-btn-count {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .home-btn-arrow {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* BRAND SCREEN */
+    #brand-page {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #brand-page.visible { display: flex; }
+
+    .brand-page-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+
+    .brand-page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .brand-page-title span { color: var(--accent); }
+
+    .brand-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+      padding: 24px 28px;
+    }
+
+    .brand-tile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      text-align: center;
+    }
+
+    .brand-tile:active { transform: scale(0.96); border-color: var(--accent-dim); }
+
+    .brand-tile img {
+      height: 32px;
+      max-width: 110px;
+      object-fit: contain;
+    }
+
+    .brand-tile-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .brand-tile-count {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* PRICE ON CARD */
+    .card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 4px;
+    }
+
+    .card-price.out-of-stock { color: var(--text-dim); }
+
+    /* STOCK BADGE */
+    .stock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 20px;
+      margin-top: 2px;
+    }
+
+    .stock-badge.in-stock { background: rgba(90,170,114,0.15); color: var(--accent); }
+    .stock-badge.out-of-stock { background: rgba(180,60,60,0.12); color: #c06060; }
+
+    .stock-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .in-stock .stock-dot { background: var(--accent); }
+    .out-of-stock .stock-dot { background: #c06060; }
+
+    /* STAFF STOCK CONTROLS */
+    .stock-controls {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .staff-mode .stock-controls { display: flex; }
+
+    .stock-ctrl-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-size: 18px;
+      line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .stock-ctrl-btn:active { transform: scale(0.9); border-color: var(--accent); color: var(--accent); }
+
+    .stock-count-display {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      min-width: 20px;
+      text-align: center;
+    }
+
+    /* STAFF MODE INDICATOR */
+    .staff-indicator {
+      display: none;
+      font-size: 11px;
+      font-weight: 500;
+      color: #0e1210;
+      background: var(--accent);
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .staff-mode .staff-indicator { display: inline-block; }
+
+    /* PRODUCT CODE on detail */
+    .detail-product-code {
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      font-family: 'DM Sans', monospace;
+    }
+
+    /* PRICE on detail */
+    .detail-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .detail-price.out-of-stock { color: var(--text-dim); }
+
+    /* RESPONSIVE */
+    @media (max-width: 680px) {
+      .detail-content { grid-template-columns: 1fr; padding: 16px; gap: 16px; }
+      .detail-img, .detail-info, .specs-panel { grid-column: 1; }
+      .grid { grid-template-columns: 1fr 1fr; padding: 10px 14px 40px; }
+      header, .search-wrap { padding-left: 16px; padding-right: 16px; }
+      .filter-row { padding-left: 16px; padding-right: 16px; }
+    }
+
+    @media (max-width: 440px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HOME PAGE -->
+<div id="home-page">
+  <div class="home-header">
+    <div class="home-logo" id="home-logo">RSPB Conwy <span>Optics</span></div>
+    <div style="margin-top:8px;min-height:22px;">
+      <span class="staff-indicator">Staff Mode</span>
+    </div>
+    <div class="home-subtitle">Select a category</div>
+  </div>
+  <div class="home-buttons">
+    <button class="home-btn" data-cat="Binoculars">
+      <div class="home-btn-left">
+        <div class="home-btn-label">Binoculars</div>
+        <div class="home-btn-count" id="count-Binoculars"></div>
+      </div>
+      <svg class="home-btn-arrow" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <button class="home-btn" data-cat="Scopes">
+      <div class="home-btn-left">
+        <div class="home-btn-label">Scopes</div>
+        <div class="home-btn-count" id="count-Scopes"></div>
+      </div>
+      <svg class="home-btn-arrow" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <button class="home-btn" data-cat="Monoculars">
+      <div class="home-btn-left">
+        <div class="home-btn-label">Monoculars</div>
+        <div class="home-btn-count" id="count-Monoculars"></div>
+      </div>
+      <svg class="home-btn-arrow" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- BRAND PAGE -->
+<div id="brand-page">
+  <div class="brand-page-header">
+    <button class="back-btn" id="brand-back-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+    <div class="brand-page-title" id="brand-page-title"></div>
+  </div>
+  <div class="brand-grid" id="brand-grid"></div>
+</div>
+
+<!-- LIST PAGE -->
+<div id="list-page" style="display:none">
+  <header>
+    <button class="back-btn" id="list-back-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+    <div class="logo" id="list-title"></div>
+    <span class="product-count" id="product-count"></span>
+  </header>
+
+  <div class="search-wrap">
+    <input class="search-input" type="text" id="search" placeholder="Search by model…">
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty">
+    <svg width="38" height="38" fill="none" stroke="#4a6356" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <p>No products found</p>
+  </div>
+</div>
+
+<!-- COMPARE BAR -->
+<div id="compare-bar">
+  <div class="compare-bar-slots" id="compare-bar-slots"></div>
+  <button class="compare-go-btn" id="compare-go-btn" disabled>Compare</button>
+</div>
+
+<div id="detail-page">
+  <div class="detail-header">
+    <button class="back-btn" id="back-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+    <div class="dh-info">
+      <div class="dh-brand" id="dh-brand"></div>
+      <div class="dh-model" id="dh-model"></div>
+    </div>
+    <img id="dh-logo" class="dh-logo" src="" alt="" onerror="this.style.display='none'">
+  </div>
+  <div class="detail-content" id="detail-content"></div>
+</div>
+
+<!-- COMPARE PAGE -->
+<div id="compare-page">
+  <div class="compare-page-header">
+    <button class="back-btn" id="compare-back-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+    <div class="compare-page-title">Compare</div>
+    <button class="back-btn" id="compare-share-btn" style="border-color:var(--accent-dim);color:var(--accent)">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Share
+    </button>
+  </div>
+  <div class="compare-table-wrap" id="compare-table-wrap"></div>
+</div>
+
+<script>
+  let products = [];
+  let activeCategory = '';
+  let activeBrand = '';
+  let searchQuery = '';
+  let compareList = [];
+  let staffMode = false;
+  let logoTapCount = 0;
+  let logoTapTimer = null;
+  // stock: { [productId]: count } persisted in localStorage
+  let stockData = {};
+
+  function loadStock() {
+    try {
+      const saved = localStorage.getItem('rspb_stock');
+      if (saved) stockData = JSON.parse(saved);
+    } catch(e) { stockData = {}; }
+  }
+
+  function saveStock() {
+    try { localStorage.setItem('rspb_stock', JSON.stringify(stockData)); } catch(e) {}
+  }
+
+  function getStock(id) {
+    return stockData[id] !== undefined ? stockData[id] : 1; // default in stock
+  }
+
+  function changeStock(id, delta, e) {
+    e.stopPropagation();
+    const current = getStock(id);
+    stockData[id] = Math.max(0, current + delta);
+    saveStock();
+    render();
+  }
+
+  function formatPrice(price) {
+    if (!price) return '';
+    return '£' + price.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  const brandLogos = {
+    'RSPB': 'logo-rspb.png',
+    'Swarovski': 'logo-swarovski.png',
+    'Zeiss': 'logo-zeiss.png',
+    'Leica': 'logo-leica.png',
+    'Nikon': 'logo-nikon.png',
+    'Kowa': 'logo-kowa.png',
+    'Kite': 'logo-kite.png',
+    'Viking': 'logo-viking.png',
+  };
+
+  async function loadProducts() {
+    products = [{"id":1,"category":"Binoculars","brand":"RSPB","model":"Puffin Jr 8x21","image":"rspb-puffin-jr-8x21.png","description":"A child-friendly compact binocular with 8x magnification. Lightweight and easy to use, ideal for young birdwatchers. Available in soft yellow and light green.","specs":{"Magnification":"8x","Objective Diameter":"21mm","ED Lens":"No","Close Focus":"4m","Field of View":"7.1\u00b0 / 124m/1000m","Eye Relief":"10.5mm","Exit Pupil":"4mm","Interpupillary Distance":"Not stated","Waterproof":"No","Nitrogen Filled":"No","Weight":"144g","Dimensions":"L79 x W100 x H35mm","Warranty":"1 year"},"logo":"logo-rspb.png","code":"R422209 (yellow) / R422210 (green)","price":30.0},{"id":2,"category":"Binoculars","brand":"RSPB","model":"Skylark 8x32","image":"rspb-skylark-8x32.png","description":"An entry-level full-size binocular from the RSPB own brand range. Lightweight and straightforward to use.","specs":{"Magnification":"8x","Objective Diameter":"32mm","ED Lens":"No","Close Focus":"3m","Field of View":"7.4\u00b0 / 130m/1000m","Eye Relief":"16.8mm","Exit Pupil":"4mm","Interpupillary Distance":"53\u201372mm","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"450g","Dimensions":"120 x 120 x 50mm","Warranty":"1 year"},"logo":"logo-rspb.png","code":"R422218","price":90.0},{"id":3,"category":"Binoculars","brand":"RSPB","model":"Skylark 8x42","image":"rspb-skylark-8x42.png","description":"The 8x42 Skylark offers a bright, wide view in a full-size body. A solid entry-level choice for birdwatching.","specs":{"Magnification":"8x","Objective Diameter":"42mm","ED Lens":"No","Close Focus":"4.5m","Field of View":"6.2\u00b0 / 108m/1000m","Eye Relief":"20.4mm","Exit Pupil":"5.25mm","Interpupillary Distance":"53\u201372mm","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"580g","Dimensions":"120 x 155 x 55mm","Warranty":"1 year"},"logo":"logo-rspb.png","code":"R422219","price":100.0},{"id":4,"category":"Binoculars","brand":"RSPB","model":"Skylark 10x42","image":"rspb-skylark-10x42.png","description":"The 10x42 Skylark gives extra reach for open habitat birding at a very accessible price point.","specs":{"Magnification":"10x","Objective Diameter":"42mm","ED Lens":"No","Close Focus":"4.5m","Field of View":"5.8\u00b0 / 101m/1000m","Eye Relief":"16.9mm","Exit Pupil":"4.2mm","Interpupillary Distance":"53\u201372mm","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"580g","Dimensions":"120 x 155 x 55mm","Warranty":"1 year"},"logo":"logo-rspb.png","code":"R422220","price":110.0},{"id":5,"category":"Binoculars","brand":"RSPB","model":"Avocet Compact 8x25","image":"rspb-avocet-compact-8x25.png","description":"A compact, lightweight binocular ideal for travel. Features ED glass for improved clarity. Waterproof and pocket-sized.","specs":{"Magnification":"8x","Objective Diameter":"25mm","ED Lens":"No","Close Focus":"2m","Field of View":"6.8\u00b0 / 119m/1000m","Eye Relief":"15.3mm","Exit Pupil":"3.1mm","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"306g","Dimensions":"L112 x W111mm","Warranty":"5 years"},"logo":"logo-rspb.png","code":"R422038","price":115.0},{"id":6,"category":"Binoculars","brand":"RSPB","model":"Avocet Compact 10x25","image":"rspb-avocet-compact-10x25.png","description":"The 10x version of the Avocet Compact. Extra magnification in a pocketable body with ED glass optics.","specs":{"Magnification":"10x","Objective Diameter":"25mm","ED Lens":"No","Close Focus":"2m","Field of View":"5.6\u00b0 / 98m/1000m","Eye Relief":"14.1mm","Exit Pupil":"2.6mm","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"306g","Dimensions":"L112 x W111mm","Warranty":"5 years"},"logo":"logo-rspb.png","code":"R422039","price":125.0},{"id":7,"category":"Binoculars","brand":"RSPB","model":"Avocet 8x32","image":"rspb-avocet-8x32.png","description":"A mid-size binocular delivering a good balance of portability and optical performance. Popular choice for day trips.","specs":{"Magnification":"8x","Objective Diameter":"32mm","ED Lens":"No","Close Focus":"3\u20133.5m","Field of View":"7.4\u00b0 / 130m/1000m","Eye Relief":"16.8mm","Exit Pupil":"4mm","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"463g","Dimensions":"L126 x W115mm","Warranty":"5 years"},"logo":"logo-rspb.png","code":"R422074","price":145.0},{"id":8,"category":"Binoculars","brand":"RSPB","model":"Avocet 8x42","image":"rspb-avocet-8x42.png","description":"Full-size 8x42 in the Avocet range. A reliable, well-rounded binocular at an accessible price.","specs":{"Magnification":"8x","Objective Diameter":"42mm","ED Lens":"No","Close Focus":"3\u20133.5m","Field of View":"6.3\u00b0 / 110m/1000m","Eye Relief":"20.4mm","Exit Pupil":"5.2mm","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"617g","Dimensions":"L148 x W127mm","Warranty":"5 years"},"logo":"logo-rspb.png","code":"R422075","price":155.0},{"id":9,"category":"Binoculars","brand":"RSPB","model":"Avocet 10x42","image":"rspb-avocet-10x42.png","description":"The 10x42 Avocet suits open-country birding where extra reach is useful. Full-size, waterproof body.","specs":{"Magnification":"10x","Objective Diameter":"42mm","ED Lens":"No","Close Focus":"3\u20133.5m","Field of View":"5.8\u00b0 / 101m/1000m","Eye Relief":"16.9mm","Exit Pupil":"4.2mm","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"615g","Dimensions":"L150 x W127mm","Warranty":"5 years"},"logo":"logo-rspb.png","code":"R422076","price":165.0},{"id":10,"category":"Binoculars","brand":"RSPB","model":"ASW 8x40","image":"rspb-asw-8x40.png","description":"A wide-field 8x40 binocular from RSPB. Good light gathering and a spacious field of view.","specs":{"Magnification":"8x","Objective Diameter":"40mm","ED Lens":"No","Close Focus":"4m","Field of View":"8.2\u00b0 / 143m/1000m","Eye Relief":"13mm","Exit Pupil":"5mm","Waterproof":"No","Nitrogen Filled":"No","Weight":"698g","Dimensions":"L130 x W176mm","Warranty":"5 years"},"logo":"logo-rspb.png","code":"R0207","price":160.0},{"id":11,"category":"Binoculars","brand":"RSPB","model":"Harrier 8x32","image":"rspb-harrier-8x32.png","description":"The Harrier range launched in 2018 with dielectric and phase-coated BaK-4 prisms for improved brightness and colour accuracy. Close focus to 2m. Fully waterproof.","specs":{"Magnification":"8x","Objective Diameter":"32mm","ED Lens":"No","Close Focus":"2m","Field of View":"7.8\u00b0 / 137m/1000m","Eye Relief":"15.6mm","Exit Pupil":"4mm","Prism Coating":"Dielectric + phase-coated BaK-4","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"509g","Dimensions":"L122 x W120mm","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R420020","price":230.0},{"id":12,"category":"Binoculars","brand":"RSPB","model":"Harrier 8x42","image":"rspb-harrier-8x42.png","description":"The 8x42 Harrier brings dielectric prism coatings and a 2m close focus to a full-size waterproof body. Sharp imagery with high contrast and accurate colours.","specs":{"Magnification":"8x","Objective Diameter":"42mm","ED Lens":"No","Close Focus":"2m","Field of View":"8.1\u00b0 / 142m/1000m","Eye Relief":"17.2mm","Exit Pupil":"5.25mm","Prism Coating":"Dielectric + phase-coated BaK-4","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"692g","Dimensions":"L122 x W125mm","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R420021","price":240.0},{"id":13,"category":"Binoculars","brand":"RSPB","model":"Harrier 10x42","image":"rspb-harrier-10x42.png","description":"The 10x42 Harrier offers extra power for scanning open habitats, with the same dielectric prism tech and 2m close focus as the 8x models.","specs":{"Magnification":"10x","Objective Diameter":"42mm","ED Lens":"No","Close Focus":"2m","Field of View":"6.5\u00b0 / 114m/1000m","Eye Relief":"15.2mm","Exit Pupil":"4.2mm","Prism Coating":"Dielectric + phase-coated BaK-4","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"674g","Dimensions":"L122 x W125mm","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R420022","price":250.0},{"id":16,"category":"Binoculars","brand":"RSPB","model":"Harrier X 8x32","image":"rspb-harrier-x-8x32.png","description":"The Harrier X is a step up from the standard Harrier, adding Super High Reflective (SHR) dielectric prism coatings and ED glass to eliminate colour fringing. Ultra-close focus. Fully waterproof with a compact magnesium-alloy body.","specs":{"Magnification":"8x","Objective Diameter":"32mm","ED Lens":"Yes","Close Focus":"2m","Field of View":"8.3\u00b0 / 145m/1000m","Eye Relief":"16.9mm","Exit Pupil":"4mm","Prism Coating":"SHR dielectric + phase-corrected BaK-4","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"524g","Dimensions":"L125 x W120mm","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422090","price":390.0},{"id":17,"category":"Binoculars","brand":"RSPB","model":"Harrier X 8x42","image":"rspb-harrier-x-8x42.png","description":"The 8x42 Harrier X combines SHR dielectric prisms with ED glass and an ultra-close focus in a shock-resistant rubber-armoured body.","specs":{"Magnification":"8x","Objective Diameter":"42mm","ED Lens":"Yes","Close Focus":"2m","Field of View":"8.1\u00b0 / 142m/1000m","Eye Relief":"18.4mm","Exit Pupil":"5.2mm","Prism Coating":"SHR dielectric + phase-corrected BaK-4","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"716g","Dimensions":"L143 x W120mm","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422091","price":400.0},{"id":18,"category":"Binoculars","brand":"RSPB","model":"Harrier X 10x42","image":"rspb-harrier-x-10x42.png","description":"The 10x42 Harrier X offers extra magnification with all the SHR dielectric and ED glass technology of the X range.","specs":{"Magnification":"10x","Objective Diameter":"42mm","ED Lens":"Yes","Close Focus":"2m","Field of View":"6.6\u00b0 / 116m/1000m","Eye Relief":"16.7mm","Exit Pupil":"4.2mm","Prism Coating":"SHR dielectric + phase-corrected BaK-4","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"693g","Dimensions":"L143 x W120mm","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422092","price":410.0},{"id":19,"category":"Binoculars","brand":"RSPB","model":"Buzzard 8x42","image":"rspb-buzzard-8x42.png","description":"The Buzzard is a mid-priced wide-angle binocular with ED and field-flattening lenses, phase-coated dielectric prisms, and a very close focus of around 1.3m in practice. Weighs 740g. A sharp, bright performer with excellent low-light capability.","specs":{"Magnification":"8x","Objective Diameter":"42mm","ED Lens":"Yes","Close Focus":"2m","Field of View":"8.1\u00b0 / 142m/1000m","Eye Relief":"18.4mm","Exit Pupil":"5.3mm","Interpupillary Distance":"56\u201376mm","Prism Coating":"Phase-coated dielectric","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"740g","Dimensions":"143 x 135 x 53mm","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422178","price":540.0},{"id":20,"category":"Binoculars","brand":"RSPB","model":"Buzzard 10x42","image":"rspb-buzzard-10x42.png","description":"The 10x42 Buzzard brings all the ED and field-flattening optics of the Buzzard range with extra magnification for open habitat use.","specs":{"Magnification":"10x","Objective Diameter":"42mm","ED Lens":"Yes","Close Focus":"2m","Field of View":"6.6\u00b0 / 116m/1000m","Eye Relief":"16.7mm","Exit Pupil":"4.2mm","Interpupillary Distance":"56\u201376mm","Prism Coating":"Phase-coated dielectric","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"715g","Dimensions":"143 x 135 x 53mm","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422179","price":550.0},{"id":21,"category":"Binoculars","brand":"RSPB","model":"Sparrowhawk 8.5x42","image":"rspb-sparrowhawk-8-5x42.png","description":"The RSPB flagship binocular. Made in Japan with a magnesium body, Phase and SHR-coated Schmidt-Pechan prisms, and flat-field multicoated ED lenses. Exceptional low-light performance. 140m/1000m field of view, 16.7mm eye relief, close focus to 2m (1.44m measured). Comes with 10-year warranty.","specs":{"Magnification":"8.5x","Objective Diameter":"42mm","ED Lens":"Yes","Close Focus":"2m","Field of View":"8\u00b0 / 140m/1000m","Eye Relief":"16.7mm","Exit Pupil":"4.9mm","Interpupillary Distance":"56\u201374mm","Prism":"SHR phase-coated Schmidt-Pechan","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"700g","Dimensions":"145 x 125 x 50mm","Body":"Magnesium","Made in":"Japan","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422180","price":850.0},{"id":22,"category":"Binoculars","brand":"RSPB","model":"Sparrowhawk 10x42","image":"rspb-sparrowhawk-10x42.png","description":"The 10x42 version of the RSPB flagship Sparrowhawk. Same Japanese optics, magnesium body, ED and SHR prism technology as the 8.5x model \u2014 with extra magnification. Close focus to 1.5m.","specs":{"Magnification":"10x","Objective Diameter":"42mm","ED Lens":"Yes","Close Focus":"1.5m","Field of View":"6.6\u00b0 / 115m/1000m","Eye Relief":"17.8mm","Exit Pupil":"4.2mm","Interpupillary Distance":"56\u201374mm","Prism":"SHR phase-coated Schmidt-Pechan","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"700g","Dimensions":"145 x 125 x 50mm","Body":"Magnesium","Made in":"Japan","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422181","price":860.0},{"id":23,"category":"Monoculars","brand":"RSPB","model":"Avocet Monocular 8x25","image":"rspb-avocet-monocular-8x25.png","description":"A compact, lightweight monocular for quick views on the go. Rubber armoured and easy to use one-handed.","specs":{"Magnification":"8x","Objective Diameter":"25mm","Waterproof":"Yes","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422182","price":50.0},{"id":24,"category":"Monoculars","brand":"RSPB","model":"Avocet Monocular 10x25","image":"rspb-avocet-monocular-10x25.png","description":"The 10x25 Avocet monocular offers extra magnification in a pocketable single-tube design.","specs":{"Magnification":"10x","Objective Diameter":"25mm","Waterproof":"Yes","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422183","price":55.0},{"id":25,"category":"Monoculars","brand":"RSPB","model":"Avocet Monocular 8x42","image":"rspb-avocet-monocular-8x42.png","description":"A full-size 8x42 monocular. Useful for travelling light without sacrificing aperture.","specs":{"Magnification":"8x","Objective Diameter":"42mm","Waterproof":"Yes","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422160","price":70.0},{"id":26,"category":"Monoculars","brand":"RSPB","model":"Avocet Monocular 10x42","image":"rspb-avocet-monocular-10x42.png","description":"The 10x42 version of the Avocet full-size monocular. Good reach and light gathering in a single-tube format.","specs":{"Magnification":"10x","Objective Diameter":"42mm","Waterproof":"Yes","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422161","price":75.0},{"id":27,"category":"Monoculars","brand":"RSPB","model":"HD Monocular 8x20","image":"rspb-hd-monocular-8x20.png","description":"A pocket monocular with HD optics. Compact and lightweight \u2014 ideal for travelling.","specs":{"Magnification":"8x","Objective Diameter":"20mm","Glass":"HD","Waterproof":"Yes","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R403544","price":110.0},{"id":28,"category":"Scopes","brand":"RSPB","model":"Avocet Scope Kit 50mm","image":"rspb-avocet-scope-kit-50mm.png","description":"A truly portable scope kit. No tripod required \u2014 a flexible, compact option for beginners or on-the-move birding. Features quality optics at an accessible price.","specs":{"Objective Diameter":"50mm","Waterproof":"Yes","Warranty":"10 years"},"logo":"logo-rspb.png","code":"","price":0},{"id":29,"category":"Scopes","brand":"RSPB","model":"Harrier 65mm ED Kit","image":"rspb-harrier-65mm-ed-kit.png","description":"A mid-range scope kit with a 65mm ED objective for sharp, bright views. Comes complete with eyepiece and case.","specs":{"Objective Diameter":"65mm","Glass":"ED","Waterproof":"Yes","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422087","price":460.0},{"id":30,"category":"Scopes","brand":"RSPB","model":"Harrier 80mm ED Kit","image":"rspb-harrier-80mm-ed-kit.png","description":"The 80mm ED Harrier scope kit brings improved light-gathering over the 65mm. Excellent for longer range viewing. Includes eyepiece and case.","specs":{"Objective Diameter":"80mm","Glass":"ED","Waterproof":"Yes","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422088","price":520.0},{"id":31,"category":"Scopes","brand":"RSPB","model":"Buzzard 80mm ED Scope","image":"rspb-buzzard-80mm-ed-scope.png","description":"The RSPB Buzzard 80mm is the flagship own-brand scope. High-quality ED optics in a robust body, supplied with case.","specs":{"Objective Diameter":"80mm","Glass":"ED","Waterproof":"Yes","Warranty":"10 years"},"logo":"logo-rspb.png","code":"R422202","price":700.0},{"id":32,"category":"Scopes","brand":"Viking","model":"Swallow 50mm","image":"viking-swallow-50mm.png","description":"A compact, lightweight Viking scope at an entry-level price. Suitable for beginners or as a travel scope.","specs":{"Objective Diameter":"50mm","Magnification":"15\u201345x","ED Lens":"No","Close Focus":"3m","Field of View":"1.3\u20132.7\u00b0","Eye Relief":"16mm","Coating":"Fully multi-coated","Prism":"BaK-4","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"980g","Dimensions":"L300 x W160 x H75mm","Warranty":"5 years"},"logo":"logo-viking.png","code":"R422167","price":159.95},{"id":33,"category":"Scopes","brand":"Viking","model":"Swallow 50mm ED","image":"viking-swallow-50mm-ed.png","description":"The ED version of the Viking Swallow adds extra-low dispersion glass for noticeably cleaner colour and sharper images.","specs":{"Objective Diameter":"50mm","Magnification":"13\u201339x","ED Lens":"Yes","Close Focus":"3m","Field of View":"3.2\u20131.7\u00b0","Field of View m/1000m":"56\u201360m","Eye Relief":"20mm","Exit Pupil":"3.8\u20131.3mm","Coating":"Fully multi-coated","Prism":"BaK-4","Body":"Polycarbonate","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"922g","Dimensions":"W80 x L275 x H155mm"},"logo":"logo-viking.png","code":"R422165","price":399.99},{"id":34,"category":"Scopes","brand":"Viking","model":"Swallow 80mm + 20-60x eyepiece","image":"viking-swallow-80mm-20-60x-eyepiece.png","description":"The 80mm Swallow is Viking's full-sized spotting scope, supplied with a 20-60x zoom eyepiece and carry case. A versatile scope for reserve use.","specs":{"Objective Diameter":"80mm","Magnification":"20\u201360x","ED Lens":"No","Close Focus":"7m","Field of View":"1.0\u20132.0\u00b0","Eye Relief":"16mm","Coating":"Fully multi-coated","Waterproof":"Yes","Nitrogen Filled":"Yes","Weight":"1300g","Dimensions":"L395 x W160 x H100mm","Warranty":"5 years"},"logo":"logo-viking.png","code":"R422136","price":259.95},{"id":35,"category":"Binoculars","brand":"Swarovski","model":"CL Curio 7x21","image":"swarovski-cl-curio-7x21.png","description":"Designed by Marc Newson, the CL Curio is the smallest, lightest binocular in the Swarovski range. Ultra-compact and foldable, yet delivering 90% light transmission and a characteristically flat, sharp Swarovski image. Available in black and burnt orange.","specs":{"Magnification":"7x","Objective Diameter":"21mm","Exit Pupil":"3mm","Eye Relief":"16mm","Field of View":"7.7\u00b0 / 135m/1000m (405ft)","Close Focus":"2.5m (8.2ft)","Apparent FOV":"51\u00b0","Interpupillary Distance":"50\u201374mm","Light Transmission":"90%","Weight":"250g (8.9oz)","Dimensions":"92 x 95 x 44mm","Waterproof":"Yes (4m)","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422111","price":665.0},{"id":36,"category":"Binoculars","brand":"Swarovski","model":"CL Pocket 8x25","image":"swarovski-cl-pocket-8x25.png","description":"Compact, folding binocular with full Swarovski optical quality. Aluminium housing with a dual-hinge bridge folds remarkably small. SWAROBRIGHT, SWAROTOP and SWARODUR coatings throughout. 90% light transmission. Close focus 2.5m. Available in the Wild Nature version (green).","specs":{"Magnification":"8x","Objective Diameter":"25mm","Exit Pupil":"3.1mm","Eye Relief":"17mm","Field of View":"6.8\u00b0 / 109m/1000m (357ft)","Close Focus":"2.5m (8.2ft)","Apparent FOV":"52\u00b0","Interpupillary Distance":"50\u201374mm","Light Transmission":"88%","Weight":"350g (12.2oz)","Dimensions":"110 x 99 x 46mm","Waterproof":"Yes (4m)","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422099","price":685.0},{"id":37,"category":"Binoculars","brand":"Swarovski","model":"CL Pocket 10x25","image":"swarovski-cl-pocket-10x25.png","description":"The 10x version of the CL Pocket. Extra magnification in the same folding aluminium body with full Swarovski coatings. Close focus 2.5m.","specs":{"Magnification":"10x","Objective Diameter":"25mm","Exit Pupil":"2.5mm","Eye Relief":"17mm","Field of View":"5.6\u00b0 / 91m/1000m (294ft)","Close Focus":"2.5m (8.2ft)","Apparent FOV":"53\u00b0","Interpupillary Distance":"50\u201374mm","Light Transmission":"88%","Weight":"350g (12.3oz)","Dimensions":"110 x 99 x 46mm","Waterproof":"Yes (4m)","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422100","price":715.0},{"id":38,"category":"Binoculars","brand":"Swarovski","model":"CL Companion 8x30","image":"swarovski-cl-companion-8x30.png","description":"A compact, lightweight binocular that delivers genuine Swarovski quality in a mid-size body. 132m/1000m field of view, 16mm eye relief, 2.7m close focus. Weighs 477g. Fully waterproof. Available in green, anthracite and other colours. Comes with Urban Jungle or Wild Nature field bag.","specs":{"Magnification":"8x","Objective Diameter":"30mm","Exit Pupil":"3.8mm","Eye Relief":"16mm","Field of View":"7.6\u00b0 / 132m/1000m (396ft)","Close Focus":"3.0m (9.8ft)","Apparent FOV":"58\u00b0","Interpupillary Distance":"55\u201374mm","Light Transmission":"90%","Weight":"490g (17.3oz)","Dimensions":"127 x 118 x 55mm","Waterproof":"Yes (4m)","Coating":"SWAROTOP, SWARODUR, SWAROCLEAN","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422009","price":1064.0},{"id":39,"category":"Binoculars","brand":"Swarovski","model":"CL Companion 10x30","image":"swarovski-cl-companion-10x30.png","description":"The 10x30 Companion gives extra reach in the same compact body as the 8x. Field of view 108m/1000m, 16mm eye relief, 2.7m close focus. 485g.","specs":{"Magnification":"10x","Objective Diameter":"30mm","Exit Pupil":"3.0mm","Eye Relief":"16mm","Field of View":"6.2\u00b0 / 108m/1000m (324ft)","Close Focus":"3.0m (9.8ft)","Apparent FOV":"58\u00b0","Interpupillary Distance":"55\u201374mm","Light Transmission":"90%","Weight":"500g (17.6oz)","Dimensions":"127 x 118 x 55mm","Waterproof":"Yes (4m)","Coating":"SWAROTOP, SWARODUR, SWAROCLEAN","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422010","price":1092.0},{"id":40,"category":"Binoculars","brand":"Swarovski","model":"EL 8.5x42","image":"swarovski-el-8-5x42.png","description":"The EL Swarovision with field flattener lenses and HD fluoride glass has been the benchmark birding binocular for over a decade. SWAROVISION technology gives edge-to-edge clarity with no rolling ball effect. 20mm eye relief, 1.5m close focus. Open-bridge design.","specs":{"Magnification":"8.5x","Objective Diameter":"42mm","Exit Pupil":"4.9mm","Eye Relief":"20mm","Field of View":"7.6\u00b0 / 133m/1000m (399ft)","Close Focus":"3.3m (10.8ft)","Apparent FOV":"60\u00b0","Interpupillary Distance":"56\u201374mm","Light Transmission":"90%","Weight":"835g (29.5oz)","Dimensions":"160 x 131 x 61mm","Waterproof":"Yes (4m)","Glass":"HD fluoride + SWAROVISION field flatteners","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R407663","price":1539.0},{"id":41,"category":"Binoculars","brand":"Swarovski","model":"EL 10x42","image":"swarovski-el-10x42.png","description":"The 10x42 EL Swarovision. Same HD fluoride glass, SWAROVISION field flatteners and 20mm eye relief as the 8.5x, with 10x magnification. Close focus 1.5m. Weight 840g.","specs":{"Magnification":"10x","Objective Diameter":"42mm","Exit Pupil":"4.2mm","Eye Relief":"20mm","Field of View":"6.4\u00b0 / 112m/1000m (336ft)","Close Focus":"3.3m (10.8ft)","Apparent FOV":"60\u00b0","Interpupillary Distance":"56\u201374mm","Light Transmission":"90%","Weight":"840g (29.6oz)","Dimensions":"160 x 131 x 61mm","Waterproof":"Yes (4m)","Glass":"HD fluoride + SWAROVISION field flatteners","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R407664","price":1577.0},{"id":42,"category":"Binoculars","brand":"Swarovski","model":"NL Pure 8x32","image":"swarovski-nl-pure-8x32.png","description":"The smallest NL Pure, delivering the widest FOV in the 32mm class. 8x magnification with Swarowski's SWAROVISION technology and the distinctive ergonomic NL body design. Available in green or burnt orange.","specs":{"Magnification":"8x","Objective Diameter":"32mm","Exit Pupil":"4.0mm","Eye Relief":"18mm","Field of View":"8.5\u00b0 / 150m/1000m (450ft)","Close Focus":"2.0m (6.6ft)","Apparent FOV":"65\u00b0","Interpupillary Distance":"54\u201372mm","Light Transmission":"92%","Weight":"640g (22.8oz)","Dimensions":"144 x 130 x 65mm","Waterproof":"Yes (4m)","Glass":"HD fluoride + SWAROVISION field flatteners","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422101","price":2050.0},{"id":43,"category":"Binoculars","brand":"Swarovski","model":"NL Pure 10x32","image":"swarovski-nl-pure-10x32.png","description":"The 10x32 NL Pure in the distinctive ergonomic body. Wide-angle FOV with 10x magnification. Available in green or burnt orange.","specs":{"Magnification":"10x","Objective Diameter":"32mm","Exit Pupil":"3.2mm","Eye Relief":"18mm","Field of View":"7.5\u00b0 / 132m/1000m (396ft)","Close Focus":"2.0m (6.6ft)","Apparent FOV":"69\u00b0","Interpupillary Distance":"54\u201372mm","Light Transmission":"92%","Weight":"640g (22.8oz)","Dimensions":"144 x 130 x 65mm","Waterproof":"Yes (4m)","Glass":"HD fluoride + SWAROVISION field flatteners","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422102","price":2090.0},{"id":44,"category":"Binoculars","brand":"Swarovski","model":"NL Pure 8x42","image":"swarovski-nl-pure-8x42.png","description":"The 8x42 NL Pure has the widest field of view of any 42mm binocular \u2014 477ft at 1000 yards (145m/1000m). The revolutionary ergonomic body with NL's distinctive wasp-waist profile. SWAROVISION field flatteners give a virtually distortion-free image. 91% light transmission. 18mm eye relief. Close focus 2m. 840g. Available in green or burnt orange.","specs":{"Magnification":"8x","Objective Diameter":"42mm","Exit Pupil":"5.3mm","Eye Relief":"18mm","Field of View":"9.1\u00b0 / 159m/1000m (477ft)","Close Focus":"2.0m (6.6ft)","Apparent FOV":"69\u00b0","Interpupillary Distance":"56\u201374mm","Light Transmission":"91%","Weight":"840g (29.5oz)","Dimensions":"158 x 131 x 71mm","Waterproof":"Yes (4m)","Glass":"HD fluoride + SWAROVISION field flatteners","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422077","price":2365.0},{"id":45,"category":"Binoculars","brand":"Swarovski","model":"NL Pure 10x42","image":"swarovski-nl-pure-10x42.png","description":"The 10x42 NL Pure. Field of view of 399ft at 1000 yards \u2014 wider than many 8x42 binoculars. SWAROVISION, 18mm eye relief, close focus 2m. 850g. Available in green or burnt orange.","specs":{"Magnification":"10x","Objective Diameter":"42mm","Exit Pupil":"4.2mm","Eye Relief":"18mm","Field of View":"7.6\u00b0 / 133m/1000m (399ft)","Close Focus":"2.0m (6.6ft)","Apparent FOV":"70\u00b0","Interpupillary Distance":"56\u201374mm","Light Transmission":"91%","Weight":"850g (30.0oz)","Dimensions":"158 x 131 x 71mm","Waterproof":"Yes (4m)","Glass":"HD fluoride + SWAROVISION field flatteners","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422078","price":2405.0},{"id":46,"category":"Binoculars","brand":"Swarovski","model":"NL Pure 12x42","image":"swarovski-nl-pure-12x42.png","description":"The 12x42 NL Pure brings high-power observation in the NL ergonomic body. Widest field of view for a 12x binocular. 91% light transmission. 850g.","specs":{"Magnification":"12x","Objective Diameter":"42mm","Exit Pupil":"3.5mm","Eye Relief":"18mm","Field of View":"6.5\u00b0 / 113m/1000m (339ft)","Close Focus":"2.6m (8.5ft)","Apparent FOV":"71\u00b0","Interpupillary Distance":"56\u201374mm","Light Transmission":"91%","Weight":"840g (29.5oz)","Dimensions":"158 x 131 x 71mm","Waterproof":"Yes (4m)","Glass":"HD fluoride + SWAROVISION field flatteners","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422079","price":2440.0},{"id":47,"category":"Binoculars","brand":"Swarovski","model":"NL Pure 10x52","image":"swarovski-nl-pure-10x52.png","description":"The 10x52 NL Pure delivers exceptional brightness in low light thanks to its large 52mm objective. Designed for demanding observation conditions. Available in green or burnt orange.","specs":{"Magnification":"10x","Objective Diameter":"52mm","Exit Pupil":"5.2mm","Eye Relief":"17mm","Field of View":"7.4\u00b0 / 130m/1000m (390ft)","Close Focus":"3.3m (10.8ft)","Apparent FOV":"68\u00b0","Interpupillary Distance":"56\u201374mm","Light Transmission":"91%","Weight":"1020g (36.0oz)","Dimensions":"174 x 131 x 77mm","Waterproof":"Yes (4m)","Glass":"HD fluoride + SWAROVISION field flatteners","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422208","price":2840.0},{"id":48,"category":"Binoculars","brand":"Swarovski","model":"NL Pure 14x52","image":"swarovski-nl-pure-14x52.png","description":"The most powerful NL Pure. 14x magnification with a 52mm objective for serious long-range work. Comes with a tripod adapter stud recommended.","specs":{"Magnification":"14x","Objective Diameter":"52mm","Exit Pupil":"3.6mm","Eye Relief":"17mm","Field of View":"5.3\u00b0 / 93m/1000m (279ft)","Close Focus":"3.8m (12.5ft)","Apparent FOV":"70\u00b0","Interpupillary Distance":"56\u201374mm","Light Transmission":"91%","Weight":"1020g (36.0oz)","Dimensions":"174 x 131 x 77mm","Waterproof":"Yes (4m)","Glass":"HD fluoride + SWAROVISION field flatteners","Coating":"SWAROTOP, SWARODUR, SWAROBRIGHT","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422207","price":2880.0},{"id":49,"category":"Binoculars","brand":"Zeiss","model":"SFL 8x30","image":"zeiss-sfl-8x30.png","description":"Zeiss SFL stands for SmartFocus Lightweight. The 8x30 is a premium compact that weighs just 460g but delivers a 142m/1000m field of view and close focus of 1.5m. UHD optical concept with T* and LotuTec coatings. Magnesium body. Field flattener lenses for edge-to-edge sharpness. Made in Japan.","specs":{"Magnification":"8x","Objective Diameter":"30mm","Exit Pupil":"3.75mm","Eye Relief":"18mm","Field of View":"142m/1000m (426ft)","Close Focus":"1.5m (4.9ft)","Apparent FOV":"63\u00b0","Interpupillary Distance":"54\u201374mm","Light Transmission":"90%","Twilight Factor":"15.5","Prism":"Schmidt-Pechan","Lens Type":"UHD","Coating":"T* + LotuTec","Nitrogen Filled":"Yes","Waterproof":"Yes (400 mbar)","Weight":"460g (16.2oz)","Length":"120mm","Width":"107mm (at 65mm IPD)","Warranty":"Lifetime transferable + 5yr no-fault"},"logo":"logo-zeiss.png","code":"R422163","price":1300.0},{"id":50,"category":"Binoculars","brand":"Zeiss","model":"SFL 10x30","image":"zeiss-sfl-10x30.png","description":"The 10x30 SFL delivers excellent magnification at just 460g. FOV 120m/1000m, close focus 1.5m, 18mm eye relief. UHD concept with T* and LotuTec. Magnesium body.","specs":{"Magnification":"10x","Objective Diameter":"30mm","Exit Pupil":"3.0mm","Eye Relief":"18mm","Field of View":"120m/1000m (360ft)","Close Focus":"1.5m (4.9ft)","Apparent FOV":"65\u00b0","Interpupillary Distance":"54\u201374mm","Light Transmission":"90%","Twilight Factor":"17.3","Prism":"Schmidt-Pechan","Lens Type":"UHD","Coating":"T* + LotuTec","Nitrogen Filled":"Yes","Waterproof":"Yes (400 mbar)","Weight":"460g (16.2oz)","Length":"120mm","Width":"107mm (at 65mm IPD)","Warranty":"Lifetime transferable + 5yr no-fault"},"logo":"logo-zeiss.png","code":"R422164","price":1350.0},{"id":51,"category":"Binoculars","brand":"Zeiss","model":"SFL 8x40","image":"zeiss-sfl-8x40.png","description":"The 8x40 SFL is shorter than most 42mm binoculars yet has a 5mm exit pupil. FOV 140m/1000m. UHD glass, T* and LotuTec coatings, magnesium body. 640g. Widely regarded as one of the best mid-size birding binoculars available.","specs":{"Magnification":"8x","Objective Diameter":"40mm","Exit Pupil":"5.0mm","Eye Relief":"18mm","Field of View":"140m/1000m (420ft)","Close Focus":"1.5m","Apparent FOV":"60\u00b0","Interpupillary Distance":"52\u201374mm","Light Transmission":"90%","Twilight Factor":"17.9","Prism":"Schmidt-Pechan","Lens Type":"UHD","Coating":"T* + LotuTec","Nitrogen Filled":"Yes","Waterproof":"Yes (400 mbar)","Weight":"640g","Length":"144mm","Width":"114mm (at 65mm IPD)","Warranty":"Lifetime transferable + 5yr no-fault"},"logo":"logo-zeiss.png","code":"R422130","price":1550.0},{"id":52,"category":"Binoculars","brand":"Zeiss","model":"SFL 10x40","image":"zeiss-sfl-10x40.png","description":"The 10x40 SFL \u2014 same body and weight as the 8x40, with 10x magnification. FOV 115m/1000m, 4mm exit pupil. UHD glass, T* and LotuTec coatings.","specs":{"Magnification":"10x","Objective Diameter":"40mm","Exit Pupil":"4.0mm","Eye Relief":"18mm","Field of View":"115m/1000m (345ft)","Close Focus":"1.5m","Apparent FOV":"60\u00b0","Interpupillary Distance":"52\u201374mm","Light Transmission":"90%","Twilight Factor":"20","Prism":"Schmidt-Pechan","Lens Type":"UHD","Coating":"T* + LotuTec","Nitrogen Filled":"Yes","Waterproof":"Yes (400 mbar)","Weight":"640g","Length":"144mm","Width":"114mm (at 65mm IPD)","Warranty":"Lifetime transferable + 5yr no-fault"},"logo":"logo-zeiss.png","code":"R422131","price":1600.0},{"id":53,"category":"Binoculars","brand":"Leica","model":"Trinovid BCA 8x20","image":"leica-trinovid-bca-8x20.png","description":"The classic Leica pocket binocular. Foldable aluminium chassis with HDC multi-coating. Splash resistant (not fully waterproof). Field of view 113m/1000m, close focus 3m, weight 235g. An elegant companion for travel, theatre or sightseeing.","specs":{"Magnification":"8x","Objective Diameter":"20mm","Exit Pupil":"2.5mm","Eye Relief":"14mm","Field of View":"6\u00b0 / 113m/1000m (340ft)","Close Focus":"3m (9.8ft)","Interpupillary Distance":"32\u201374mm","Light Transmission":"87%","Coating":"HDC multicoating, P40 phase, HLS prism","Housing":"Aluminium","Waterproof":"Splash-proof","Nitrogen Filled":"No","Weight":"235g (8.3oz)","Dimensions":"96 x 92 x 37mm"},"logo":"logo-leica.png","code":"R407281","price":405.0},{"id":54,"category":"Binoculars","brand":"Leica","model":"Trinovid BCA 10x25","image":"leica-trinovid-bca-10x25.png","description":"The 10x25 BCA Trinovid. HDC and AquaDura coated, P40 phase-corrected BaK-4 prisms. FOV 95m/1000m, close focus 5m, weight 255g. Foldable double-hinge design. Splash resistant.","specs":{"Magnification":"10x","Objective Diameter":"25mm","Exit Pupil":"2.5mm","Eye Relief":"14.6mm","Field of View":"5\u00b0 / 90m/1000m (273ft)","Close Focus":"5m (16.5ft)","Interpupillary Distance":"32\u201374mm","Light Transmission":"87%","Coating":"HDC multicoating, P40 phase, HLS prism","Housing":"Aluminium","Waterproof":"Splash-proof","Nitrogen Filled":"No","Weight":"255g (9.0oz)","Dimensions":"92 x 110 x 37mm"},"logo":"logo-leica.png","code":"R407282","price":450.0},{"id":55,"category":"Binoculars","brand":"Leica","model":"Trinovid HD 8x32","image":"leica-trinovid-hd-8x32.png","description":"A mid-size Leica with an exceptionally short close focus of just 1m (3.3ft). FOV 115.5m/1000m, 17mm eye relief, weight 650g. Phase-corrected BaK-4 prisms with HighLux (HLS) mirror coatings. Nitrogen-filled, waterproof. Made in Portugal.","specs":{"Magnification":"8x","Objective Diameter":"32mm","Field of View":"115.5m/1000m (372ft)","Close Focus":"1m (3.3ft)","Exit Pupil":"4mm","Eye Relief":"17mm","Weight":"650g (23oz)","Body":"Aluminium alloy, rubber armour","Coating":"HDC fully multi-coated, P40 phase, HLS prism","Waterproof":"Yes (4m)","Warranty":"10-year + 30-year manufacturer"},"logo":"logo-leica.png","code":"","price":0},{"id":56,"category":"Binoculars","brand":"Leica","model":"Trinovid HD 8x42","image":"leica-trinovid-hd-8x42.png","description":"A full-size Leica Trinovid with 17mm eye relief and 1.8m close focus (approx 1.5m measured). FOV 124m/1000m, weight 750g. Phase-corrected BaK-4 prisms with HighLux mirror coatings. Nitrogen-filled, waterproof. Made in Portugal.","specs":{"Magnification":"8x","Objective Diameter":"42mm","Exit Pupil":"5.3mm","Eye Relief":"15.5mm","Field of View":"7.2\u00b0 / 126m/1000m (378ft)","Close Focus":"3.5m (11.5ft)","Twilight Factor":"18.3","Interpupillary Distance":"55\u201375mm","Coating":"HDC multicoating, P40 phase, HLS prism","Housing":"Cast magnesium, nitrogen filled","Waterproof":"Yes (5m)","Nitrogen Filled":"Yes","Weight":"810g","Dimensions":"121 x 142 x 67mm","Eyecups":"Removable, 4 detent positions"},"logo":"logo-leica.png","code":"R422047","price":959.0},{"id":57,"category":"Binoculars","brand":"Leica","model":"Trinovid HD 10x42","image":"leica-trinovid-hd-10x42.png","description":"The 10x42 Trinovid HD. FOV 103m/1000m, 15mm eye relief, close focus 1.6m, weight 730g. Phase-corrected BaK-4 prisms with HLS coatings. Nitrogen-filled, waterproof. Made in Portugal.","specs":{"Magnification":"10x","Objective Diameter":"42mm","Exit Pupil":"4.2mm","Eye Relief":"16mm","Field of View":"6.2\u00b0 / 108m/1000m (324ft)","Close Focus":"3.5m (11.5ft)","Twilight Factor":"20.5","Interpupillary Distance":"55\u201375mm","Coating":"HDC multicoating, P40 phase, HLS prism","Housing":"Cast magnesium, nitrogen filled","Waterproof":"Yes (5m)","Nitrogen Filled":"Yes","Weight":"795g","Dimensions":"120 x 147 x 68mm","Eyecups":"Removable, 4 detent positions"},"logo":"logo-leica.png","code":"R422048","price":979.0},{"id":58,"category":"Binoculars","brand":"Kite","model":"APC Stabilized 12x42","image":"kite-apc-stabilized-12x42.png","description":"The Kite APC 12x42 uses gimbal-based image stabilisation with a 2\u00b0 correction angle \u2014 far beyond conventional IS binoculars. Fully waterproof. 17mm eye relief. Battery life 120 hours. Perfect for open country, coastal birding, and marine use where steadiness at high power is essential.","specs":{"Magnification":"12x","Objective Diameter":"42mm","Exit Pupil":"3.5mm","Eye Relief":"17mm","Field of View":"3.85\u00b0 / 67m/1000m","Close Focus":"4m","Interpupillary Distance":"57\u201376mm","IS Correction Angle":"2\u00b0","IS System":"Gimbal (Angle Power Control)","Battery":"2x AA + 2x AA internal spare","Battery Life":"120 hours","Waterproof":"Yes (IPX7, 1m)","Nitrogen Filled":"Yes","Weight":"720g (inc. batteries)","Warranty":"2 years"},"logo":"logo-kite.png","code":"R422215","price":1099.0},{"id":59,"category":"Binoculars","brand":"Kite","model":"APC Stabilized 16x42","image":"kite-apc-stabilized-16x42.png","description":"The most powerful APC binocular. 16x magnification with 2\u00b0 gimbal-based image stabilisation. Ideal for scanning at long range \u2014 seawatching, estuary birding, or anywhere a scope and tripod aren't practical. Fully waterproof. Note: 14mm eye relief is shorter than the 12x model.","specs":{"Magnification":"16x","Objective Diameter":"42mm","Exit Pupil":"2.62mm","Eye Relief":"14mm","Field of View":"3.9\u00b0 / 68m/1000m","Close Focus":"4m","Interpupillary Distance":"57\u201376mm","IS Correction Angle":"2\u00b0","IS System":"Gimbal (Angle Power Control)","Battery":"2x AA + 2x AA internal spare","Battery Life":"120 hours","Waterproof":"Yes (IPX7, 1m)","Nitrogen Filled":"Yes","Weight":"735g (inc. batteries)","Warranty":"2 years"},"logo":"logo-kite.png","code":"R422216","price":1149.0},{"id":60,"category":"Binoculars","brand":"Nikon","model":"Travelite EX 8x25","image":"nikon-travelite-ex-8x25.png","description":"A lightweight compact binocular from Nikon. Roof prism design, multi-coated lenses, twist-up eyecups. Suited to general use and travel.","specs":{"Magnification":"8x","Objective Diameter":"25mm","Exit Pupil":"3.1mm","Eye Relief":"15.5mm","Field of View":"6.3\u00b0 / 110m/1000m","Close Focus":"2.8m","Apparent FOV":"47.5\u00b0","Interpupillary Distance":"56\u201372mm","Prism":"Porro","Weight":"355g","Length":"100mm","Width":"116mm","Depth":"56mm"},"logo":"logo-nikon.png","code":"R0111352","price":140.0},{"id":61,"category":"Binoculars","brand":"Nikon","model":"Travelite EX 10x25","image":"nikon-travelite-ex-10x25.png","description":"The 10x Travelite EX. Extra magnification in the same compact multi-coated body. Twist-up eyecups.","specs":{"Magnification":"10x","Objective Diameter":"25mm","Exit Pupil":"2.5mm","Eye Relief":"15.9mm","Field of View":"5.0\u00b0 / 87m/1000m","Close Focus":"2.8m","Apparent FOV":"47.2\u00b0","Interpupillary Distance":"56\u201372mm","Prism":"Porro","Weight":"365g","Length":"102mm","Width":"116mm","Depth":"56mm"},"logo":"logo-nikon.png","code":"R0111354","price":160.0},{"id":62,"category":"Binoculars","brand":"Nikon","model":"Monarch M7 8x30","image":"nikon-monarch-m7-8x30.png","description":"A premium mid-size Nikon with ED glass, dielectric multi-layer prism coatings and a 1.5m close focus. Lightweight, nitrogen-filled and waterproof. A highly regarded birding binocular.","specs":{"Magnification":"8x","Objective Diameter":"30mm","Prism":"Roof (Dach)","Field of View":"8.3\u00b0 / 145m/1000m","Apparent FOV":"60.3\u00b0","Exit Pupil":"3.8mm","Brightness":"14.4","Eye Relief":"15.1mm","Close Focus":"2.0m","Dimensions":"L119 x W125 x D48mm","Weight":"465g","IPD":"56\u201372mm","Waterproof":"Yes (1m, 10 min)","Nitrogen Filled":"Yes (fogproof)","ED Lens":"Yes"},"logo":"logo-nikon.png","code":"R422118","price":499.0},{"id":63,"category":"Scopes","brand":"Swarovski","model":"ATC 17-40x56","image":"swarovski-atc-17-40x56.png","description":"Swarovski's compact spotting scope with a fixed-body design. The 17-40x zoom eyepiece provides an enormous field of view compared to traditional compact scopes. 186ft\u2013102ft at 1000 yards. 20mm eye relief. Weight 895g. Ideal for travel.","specs":{"Objective Diameter":"56mm","Magnification":"17\u201340x","Exit Pupil":"3.4\u20131.4mm","Eye Relief":"20mm","Field of View":"3.52\u20131.93\u00b0 / 62\u201334m/1000m (186\u2013102ft)","Close Focus":"3.4m (11.2ft)","Light Transmission":"88%","Weight":"970g (34.2oz)","Dimensions":"258 x 65 x 142mm (angled)","Waterproof":"Yes (4m)","Coating":"SWAROVISION","Filter Thread":"M58 x 0.75","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R422149","price":2040.0},{"id":64,"category":"Scopes","brand":"Swarovski","model":"ATX Body Only","image":"swarovski-atx-body-only.png","description":"The Swarovski ATX angled body without objective module \u2014 purchased separately to mix and match with 65, 85 or 95mm objectives. The modular ATX/STX system allows one eyepiece to be shared across objective sizes.","specs":{"Type":"Modular angled eyepiece body","Compatible Objectives":"65mm, 85mm, 95mm, 115mm","Magnification":"25\u201360x (with 65/85mm) / 30\u201370x (with 95/115mm)","Exit Pupil Distance":"20mm","Apparent FOV":"57\u201371\u00b0","Waterproof":"Yes (4m)","Body":"Magnesium alloy","Tripod Thread":"1/4\" UNC / 3/8\" UNC","Coating":"SWAROVISION"},"logo":"logo-swarovski.png","code":"R403642","price":1965.0},{"id":65,"category":"Scopes","brand":"Swarovski","model":"ATS 65HD + 25-50x eyepiece","image":"swarovski-ats-65hd-25-50x-eyepiece.png","description":"A straight-view Swarovski scope with 65mm HD objective, supplied with 25-50x wide-angle eyepiece and stay-on case. A premium full-size scope for serious observation.","specs":{"Objective Diameter":"65mm","Magnification":"25-50x (with WA eyepiece)","Glass":"HD","Body":"Straight-view","Waterproof":"Yes","Supplied with":"25-50x eyepiece, stay-on case"},"logo":"logo-swarovski.png","code":"R403639","price":2325.0},{"id":66,"category":"Scopes","brand":"Swarovski","model":"ATS 80HD + 25-50x eyepiece","image":"swarovski-ats-80hd-25-50x-eyepiece.png","description":"The 80mm HD ATS scope with 25-50x eyepiece and stay-on case. Swarovski's flagship straight-view scope \u2014 exceptional resolution and brightness.","specs":{"Objective Diameter":"80mm","Magnification":"25\u201350x","Exit Pupil":"3.2\u20131.6mm","Eye Relief":"17mm","Field of View":"2.4\u20131.55\u00b0 / 42\u201327m/1000m (126\u201381ft)","Close Focus":"5m (16.4ft)","Apparent FOV":"60\u201370\u00b0","Light Transmission":"85%","Filter Thread":"M82 x 0.75","Weight":"1675g (59.1oz)","Length":"400mm (angled)","Waterproof":"Yes (4m)","Body":"Straight or angled view","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R403640","price":2930.0},{"id":67,"category":"Scopes","brand":"Swarovski","model":"ATX 65mm Objective 25-60x","image":"swarovski-atx-65mm-objective-25-60x.png","description":"The 65mm objective module for the ATX/STX system, paired with a 25-60x eyepiece. Wide, bright views for general birding. Lighter than the 85 and 95mm options.","specs":{"Objective Diameter":"65mm","Magnification":"25\u201360x","Exit Pupil":"2.6\u20131.1mm","Eye Relief":"20mm","Field of View":"2.3\u20131.3\u00b0 / 41\u201323m/1000m (124\u201368ft)","Close Focus":"2.1m (6.9ft)","Weight (angled)":"1585g (55.9oz)","Weight (straight)":"1640g (57.8oz)","Length (angled)":"339mm","Length (straight)":"367mm","Waterproof":"Yes (4m)","Coating":"SWAROVISION","Tripod Thread":"1/4\" UNC / 3/8\" UNC","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R403643","price":779.0},{"id":68,"category":"Scopes","brand":"Swarovski","model":"ATX 85mm Objective 25-60x","image":"swarovski-atx-85mm-objective-25-60x.png","description":"The 85mm ATX objective with 25-60x eyepiece. A step up in light-gathering from the 65mm \u2014 noticeably brighter in poor light or at maximum magnification.","specs":{"Objective Diameter":"85mm","Magnification":"25\u201360x","Exit Pupil":"3.4\u20131.4mm","Eye Relief":"20mm","Field of View":"2.3\u20131.3\u00b0 / 41\u201323m/1000m (124\u201368ft)","Close Focus":"3.6m (11.8ft)","Weight (angled)":"1910g (67.4oz)","Weight (straight)":"1965g (69.3oz)","Length (angled)":"372mm","Length (straight)":"400mm","Waterproof":"Yes (4m)","Coating":"SWAROVISION","Tripod Thread":"1/4\" UNC / 3/8\" UNC","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R403644","price":1330.0},{"id":69,"category":"Scopes","brand":"Swarovski","model":"ATX 95mm Objective 30-70x","image":"swarovski-atx-95mm-objective-30-70x.png","description":"The flagship 95mm ATX objective. Maximum light-gathering for challenging viewing conditions. Paired with 30-70x eyepiece \u2014 the most powerful optic in the Swarovski scope range.","specs":{"Objective Diameter":"95mm","Magnification":"30\u201370x","Exit Pupil":"3.2\u20131.4mm","Eye Relief":"20mm","Field of View":"1.9\u20131.1\u00b0 / 35\u201319m/1000m (104\u201357ft)","Close Focus":"4.8m (15.7ft)","Weight (angled)":"2150g (75.8oz)","Weight (straight)":"2205g (77.8oz)","Length (angled)":"426mm","Length (straight)":"454mm","Waterproof":"Yes (4m)","Coating":"SWAROVISION","Tripod Thread":"1/4\" UNC / 3/8\" UNC","Warranty":"10 years"},"logo":"logo-swarovski.png","code":"R403645","price":1729.0},{"id":70,"category":"Scopes","brand":"Kowa","model":"TSN-55A Prominar","image":"kowa-tsn-55a-prominar.png","description":"Kowa's compact flagship spotting scope. The TSN-55A (angled) uses a 55mm pure fluorite crystal objective paired with the full-size TE-11WZ II wide-angle zoom eyepiece \u2014 giving 192ft\u2013105ft FOV at 1000 yards. Dual fast/fine focus knobs. Fully waterproof (IPX7). Made in Japan. 34oz. Close focus 9.2ft.","specs":{"Objective Diameter":"55mm","Objective Material":"Pure fluorite crystal","Magnification":"17\u201340x","Exit Pupil":"3.2\u20131.4mm","Eye Relief":"17mm","Field of View":"64\u201335m/1000m","Close Focus":"2.8m","Eyepiece":"TE-11WZ II (integrated)","Coating":"KR (objective), XD lenses","Filter Thread":"58mm","Waterproof":"Yes (IPX7, nitrogen filled)","Nitrogen Filled":"Yes","Weight":"965g","Length":"255mm (angled)","Focus":"Dual fast/fine","Made in":"Japan","Warranty":"Lifetime (authorized dealer)"},"logo":"logo-kowa.png","code":"R422205","price":1999.0},{"id":71,"category":"Scopes","brand":"Kowa","model":"TSN-501 Angled 20-40x50","logo":"logo-kowa.png","image":"kowa-tsn-501-angled-20-40x50.png","description":"The Kowa TSN-500 is an ultra-compact 50mm spotting scope \u2014 light enough to carry anywhere. The fixed 20-40x zoom eyepiece and close focus of 2.5m make it ideal for beginners, casual birders, or anyone who wants a capable scope without the bulk. Polycarbonate body, nitrogen-filled and waterproof to IPX6. Available in angled (TSN-501) and straight (TSN-502) versions.","specs":{"Objective Diameter":"50mm","Objective Material":"Standard glass","Magnification":"20\u201340x","Exit Pupil":"2.5\u20131.3mm","Eye Relief":"14\u201312.5mm","Field of View":"2.3\u20131.6\u00b0 / 40\u201328m/1000m","Close Focus":"2.5m","Coating":"Multi-coated","Body":"Polycarbonate","Filter Thread":"55mm","Waterproof":"Yes (IPX6)","Nitrogen Filled":"Yes","Weight":"400g","Dimensions (angled)":"239 x 125 x 72mm","Dimensions (straight)":"251 x 83 x 72mm","Eyepiece":"Fixed (non-interchangeable)"},"code":"R410124","price":269.0}];
+    render();
+    loadStock();
+    // Update home screen counts
+    ['Binoculars','Scopes','Monoculars'].forEach(cat => {
+      const el = document.getElementById('count-' + cat);
+      if (el) el.textContent = products.filter(p => p.category === cat).length + ' products';
+    });
+  }
+
+  function logoImg(src, cls, alt) {
+    if (!src) return '';
+    return `<img src="${src}" class="${cls}" alt="${alt}" onerror="this.style.display='none'">`;
+  }
+
+  // ── STAFF MODE ─────────────────────────────────────────────
+  function toggleStaffMode() {
+    staffMode = !staffMode;
+    document.body.classList.toggle('staff-mode', staffMode);
+    render();
+  }
+
+  function handleLogoTap() {
+    logoTapCount++;
+    clearTimeout(logoTapTimer);
+    if (logoTapCount >= 3) {
+      logoTapCount = 0;
+      toggleStaffMode();
+    } else {
+      logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 800);
+    }
+  }
+
+  // ── NAVIGATION ─────────────────────────────────────────────
+  function showPage(id) {
+    ['home-page','brand-page','list-page'].forEach(p => {
+      const el = document.getElementById(p);
+      if (el) el.style.display = p === id ? (p === 'brand-page' ? 'flex' : 'block') : 'none';
+    });
+    // home-page uses flex
+    if (id === 'home-page') document.getElementById('home-page').style.display = 'flex';
+  }
+
+  function openBrandPage(category) {
+    activeCategory = category;
+    activeBrand = '';
+    searchQuery = '';
+
+    document.getElementById('brand-page-title').innerHTML =
+      `<span>${category}</span>`;
+
+    const brands = [...new Set(products.filter(p => p.category === category).map(p => p.brand))].sort();
+
+    // Add "All" tile first
+    const allCount = products.filter(p => p.category === category).length;
+    let tilesHTML = `<div class="brand-tile" data-brand="All">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--accent)">All</div>
+      <div class="brand-tile-count">${allCount} products</div>
+    </div>`;
+
+    tilesHTML += brands.map(brand => {
+      const count = products.filter(p => p.category === category && p.brand === brand).length;
+      const logo = brandLogos[brand] || '';
+      return `<div class="brand-tile" data-brand="${brand}">
+        ${logo ? `<img src="${logo}" alt="${brand}" onerror="this.style.display='none'">` : ''}
+        <div class="brand-tile-name">${brand}</div>
+        <div class="brand-tile-count">${count} product${count !== 1 ? 's' : ''}</div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('brand-grid').innerHTML = tilesHTML;
+
+    document.querySelectorAll('.brand-tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        activeBrand = tile.dataset.brand;
+        openListPage();
+      });
+    });
+
+    showPage('brand-page');
+  }
+
+  function openListPage() {
+    const brandLabel = activeBrand === 'All' ? 'All Brands' : activeBrand;
+    document.getElementById('list-title').innerHTML =
+      `${activeCategory} <span style="color:var(--accent);font-size:16px;font-weight:400">${brandLabel}</span>`;
+    document.getElementById('search').value = '';
+    searchQuery = '';
+    showPage('list-page');
+    render();
+  }
+
+  // ── COMPARE STATE ──────────────────────────────────────────
+  function isInCompare(id) { return compareList.includes(id); }
+
+  function toggleCompare(id, e) {
+    e.stopPropagation();
+    if (isInCompare(id)) {
+      compareList = compareList.filter(x => x !== id);
+    } else {
+      if (compareList.length >= 2) return; // already full
+      compareList.push(id);
+    }
+    updateCompareBar();
+    // refresh card states without full re-render
+    document.querySelectorAll('.card').forEach(c => {
+      const cid = parseInt(c.dataset.id);
+      const btn = c.querySelector('.compare-btn');
+      if (isInCompare(cid)) {
+        c.classList.add('compare-selected');
+        if (btn) { btn.classList.add('selected'); btn.title = 'Remove from compare'; btn.innerHTML = checkIcon(); }
+      } else {
+        c.classList.remove('compare-selected');
+        if (btn) { btn.classList.remove('selected'); btn.title = 'Add to compare'; btn.innerHTML = compareIcon(); }
+      }
+    });
+    // update detail compare btn if visible
+    const dcb = document.getElementById('detail-compare-btn');
+    if (dcb) {
+      const did = parseInt(dcb.dataset.id);
+      if (isInCompare(did)) { dcb.classList.add('selected'); dcb.textContent = '✓ Added to compare'; }
+      else { dcb.classList.remove('selected'); dcb.textContent = '+ Compare'; }
+    }
+  }
+
+  function compareIcon() {
+    return `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>`;
+  }
+
+  function checkIcon() {
+    return `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>`;
+  }
+
+  function updateCompareBar() {
+    const bar = document.getElementById('compare-bar');
+    const slots = document.getElementById('compare-bar-slots');
+    const goBtn = document.getElementById('compare-go-btn');
+
+    if (compareList.length === 0) {
+      bar.classList.remove('visible');
+      return;
+    }
+
+    bar.classList.add('visible');
+
+    const slotsHTML = [0, 1].map(i => {
+      const id = compareList[i];
+      if (id !== undefined) {
+        const p = products.find(x => x.id === id);
+        return `<div class="compare-slot filled">
+          <span class="compare-slot-name">${p.brand} ${p.model}</span>
+          <button class="compare-slot-remove" onclick="toggleCompare(${id}, event)" title="Remove">✕</button>
+        </div>`;
+      } else {
+        return `<div class="compare-slot"><span style="color:var(--text-dim);font-size:12px">Select a product…</span></div>`;
+      }
+    }).join('');
+
+    slots.innerHTML = slotsHTML;
+    goBtn.disabled = compareList.length < 2;
+  }
+
+  // ── RENDER GRID ────────────────────────────────────────────
+  function render() {
+    const filtered = products.filter(p => {
+      const matchCat = !activeCategory || p.category === activeCategory;
+      const matchBrand = !activeBrand || activeBrand === 'All' || p.brand === activeBrand;
+      const q = searchQuery.toLowerCase();
+      const matchSearch = !q || p.brand.toLowerCase().includes(q) || p.model.toLowerCase().includes(q);
+      return matchCat && matchBrand && matchSearch;
+    });
+
+    const grid = document.getElementById('grid');
+    const empty = document.getElementById('empty');
+    document.getElementById('product-count').textContent = filtered.length + (filtered.length === 1 ? ' product' : ' products');
+
+    if (!filtered.length) {
+      grid.innerHTML = '';
+      empty.classList.add('visible');
+      return;
+    }
+
+    empty.classList.remove('visible');
+
+    grid.innerHTML = filtered.map(p => {
+      const inCompare = isInCompare(p.id);
+      const stock = getStock(p.id);
+      const inStock = stock > 0;
+      const priceStr = p.price ? formatPrice(p.price) : '';
+      return `
+      <div class="card${inCompare ? ' compare-selected' : ''}" data-id="${p.id}">
+        <button class="compare-btn${inCompare ? ' selected' : ''}" data-cid="${p.id}" title="${inCompare ? 'Remove from compare' : 'Add to compare'}">
+          ${inCompare ? checkIcon() : compareIcon()}
+        </button>
+        <div class="card-img">
+          ${p.image
+            ? `<img src="${p.image}" class="product-photo" alt="${p.brand} ${p.model}" onerror="this.style.display='none'">`
+            : `<div class="no-img">
+                <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+                  <circle cx="11" cy="5" r="2"/><circle cx="11" cy="19" r="2"/>
+                  <path d="M8 5H6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1M14 5h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1M8 19H6a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h1M14 19h2a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2h-1"/>
+                </svg>
+              </div>`}
+          ${logoImg(p.logo, 'card-brand-logo', p.brand)}
+        </div>
+        <div class="card-body">
+          <div class="card-tag-row">
+            <span class="cat-tag">${p.category}</span>
+            <span class="brand-label">${p.brand}</span>
+          </div>
+          <div class="card-model">${p.model}</div>
+          ${priceStr ? `<div class="card-price${!inStock ? ' out-of-stock' : ''}">${priceStr}</div>` : ''}
+          <div class="stock-badge ${inStock ? 'in-stock' : 'out-of-stock'}">
+            <span class="stock-dot"></span>
+            ${staffMode ? `${stock} in stock` : (inStock ? 'In Stock' : 'Out of Stock')}
+          </div>
+          <div class="stock-controls">
+            <button class="stock-ctrl-btn" data-sid="${p.id}" data-delta="-1">−</button>
+            <span class="stock-count-display">${stock}</span>
+            <button class="stock-ctrl-btn" data-sid="${p.id}" data-delta="1">+</button>
+          </div>
+          <div class="card-footer">
+            <svg class="card-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    grid.querySelectorAll('.stock-ctrl-btn').forEach(btn => {
+      btn.addEventListener('click', e => changeStock(parseInt(btn.dataset.sid), parseInt(btn.dataset.delta), e));
+    });
+
+    grid.querySelectorAll('.compare-btn').forEach(btn => {
+      btn.addEventListener('click', e => toggleCompare(parseInt(btn.dataset.cid), e));
+    });
+
+    grid.querySelectorAll('.card').forEach(c => {
+      c.addEventListener('click', () => openDetail(parseInt(c.dataset.id)));
+    });
+  }
+
+  // ── DETAIL PAGE ────────────────────────────────────────────
+  function openDetail(id) {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+
+    document.getElementById('dh-brand').textContent = p.brand;
+    document.getElementById('dh-model').textContent = p.model;
+
+    const dhLogo = document.getElementById('dh-logo');
+    if (p.logo) { dhLogo.src = p.logo; dhLogo.alt = p.brand; dhLogo.style.display = ''; }
+    else { dhLogo.style.display = 'none'; }
+
+    const stock = getStock(p.id);
+    const inStock = stock > 0;
+    const priceStr = p.price ? formatPrice(p.price) : '';
+
+    const specsHTML = Object.entries(p.specs).map(([k, v]) => `
+      <div class="spec-item">
+        <div class="spec-label">${k}</div>
+        <div class="spec-value">${v}</div>
+      </div>
+    `).join('');
+
+    const inCompare = isInCompare(p.id);
+    const canAdd = compareList.length < 2 || inCompare;
+
+    document.getElementById('detail-content').innerHTML = `
+      <div class="detail-img">
+        ${p.image
+          ? `<img src="${p.image}" class="product-photo" alt="${p.brand} ${p.model}" onerror="this.style.display='none'">`
+          : `<div class="no-img-lg">
+              <svg width="52" height="52" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+                <circle cx="11" cy="5" r="2"/><circle cx="11" cy="19" r="2"/>
+                <path d="M8 5H6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1M14 5h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1M8 19H6a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h1M14 19h2a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2h-1"/>
+              </svg>
+            </div>`}
+        ${logoImg(p.logo, 'brand-logo-watermark', p.brand)}
+      </div>
+      <div class="detail-info">
+        <div class="detail-tags">
+          <span class="detail-cat-tag">${p.category}</span>
+        </div>
+        ${logoImg(p.logo, 'detail-info-logo', p.brand)}
+        <div class="detail-name">${p.model}</div>
+        ${p.code ? `<div class="detail-product-code">${p.code}</div>` : ''}
+        ${priceStr ? `<div class="detail-price${!inStock ? ' out-of-stock' : ''}">${priceStr}</div>` : ''}
+        <div class="stock-badge ${inStock ? 'in-stock' : 'out-of-stock'}" style="width:fit-content">
+          <span class="stock-dot"></span>
+          ${staffMode ? `${stock} in stock` : (inStock ? 'In Stock' : 'Out of Stock')}
+        </div>
+        ${staffMode ? `
+          <div class="stock-controls" style="display:flex">
+            <button class="stock-ctrl-btn" data-sid="${p.id}" data-delta="-1" id="detail-stock-minus">−</button>
+            <span class="stock-count-display">${stock}</span>
+            <button class="stock-ctrl-btn" data-sid="${p.id}" data-delta="1" id="detail-stock-plus">+</button>
+          </div>` : ''}
+        <p class="detail-desc">${p.description}</p>
+        ${canAdd
+          ? `<button class="detail-compare-btn${inCompare ? ' selected' : ''}" id="detail-compare-btn" data-id="${p.id}">
+              ${inCompare ? '✓ Added to compare' : '+ Compare'}
+            </button>`
+          : `<button class="detail-compare-btn" style="opacity:0.4;cursor:default" disabled>Compare (full)</button>`
+        }
+      </div>
+      <div class="specs-panel">
+        <div class="specs-title">Specifications</div>
+        <div class="specs-grid">${specsHTML}</div>
+      </div>
+    `;
+
+    const dcb = document.getElementById('detail-compare-btn');
+    if (dcb) dcb.addEventListener('click', e => toggleCompare(parseInt(dcb.dataset.id), e));
+
+    // Detail page stock controls (staff mode only)
+    const dminus = document.getElementById('detail-stock-minus');
+    const dplus = document.getElementById('detail-stock-plus');
+    if (dminus) dminus.addEventListener('click', e => { changeStock(parseInt(dminus.dataset.sid), -1, e); openDetail(p.id); });
+    if (dplus) dplus.addEventListener('click', e => { changeStock(parseInt(dplus.dataset.sid), 1, e); openDetail(p.id); });
+
+    document.getElementById('detail-page').classList.add('visible');
+    document.getElementById('detail-page').scrollTop = 0;
+  }
+
+  // ── COMPARE PAGE ───────────────────────────────────────────
+  function openComparePage() {
+    const [a, b] = compareList.map(id => products.find(x => x.id === id));
+    if (!a || !b) return;
+
+    // Collect all spec keys from both products
+    const allKeys = Array.from(new Set([
+      ...Object.keys(a.specs),
+      ...Object.keys(b.specs)
+    ]));
+
+    function productColHeader(p) {
+      return `<div class="compare-col-header">
+        ${logoImg(p.logo, 'cp-logo', p.brand)}
+        <div class="compare-col-brand">${p.brand}</div>
+        <div class="compare-col-model">${p.model}</div>
+        <div class="compare-col-img">
+          ${p.image
+            ? `<img src="${p.image}" alt="${p.model}" onerror="this.style.display='none'">`
+            : `<svg width="36" height="36" fill="none" stroke="#4a6356" stroke-width="1" viewBox="0 0 24 24">
+                <circle cx="11" cy="5" r="2"/><circle cx="11" cy="19" r="2"/>
+                <path d="M8 5H6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1M14 5h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1M8 19H6a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h1M14 19h2a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2h-1"/>
+              </svg>`}
+        </div>
+      </div>`;
+    }
+
+    const rowsHTML = allKeys.map(key => {
+      const va = a.specs[key];
+      const vb = b.specs[key];
+      const diff = va !== vb;
+      return `<div class="compare-spec-row">
+        <div class="compare-spec-key">${key}</div>
+        <div class="compare-spec-val${diff ? ' diff' : ''}${!va ? ' missing' : ''}">${va || '—'}</div>
+        <div class="compare-spec-val${diff ? ' diff' : ''}${!vb ? ' missing' : ''}">${vb || '—'}</div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('compare-table-wrap').innerHTML = `
+      <div class="diff-legend">
+        <div class="diff-swatch"></div>
+        <span>Highlighted rows differ between products</span>
+      </div>
+      <div class="compare-products-row">
+        <div></div>
+        ${productColHeader(a)}
+        ${productColHeader(b)}
+      </div>
+      <div class="compare-spec-table">${rowsHTML}</div>
+    `;
+
+    document.getElementById('compare-page').classList.add('visible');
+    document.getElementById('compare-page').scrollTop = 0;
+
+    // Auto-clear compare list after viewing
+    compareList = [];
+    updateCompareBar();
+    render();
+  }
+
+  // ── EVENT LISTENERS ────────────────────────────────────────
+
+  // Home screen buttons
+  document.querySelectorAll('.home-btn').forEach(btn => {
+    btn.addEventListener('click', () => openBrandPage(btn.dataset.cat));
+  });
+
+  // Logo triple-tap for staff mode
+  document.getElementById('home-logo').addEventListener('click', handleLogoTap);
+
+  // Brand page back → home
+  document.getElementById('brand-back-btn').addEventListener('click', () => showPage('home-page'));
+
+  // List page back → brand page
+  document.getElementById('list-back-btn').addEventListener('click', () => showPage('brand-page'));
+
+  document.getElementById('search').addEventListener('input', e => {
+    searchQuery = e.target.value;
+    render();
+  });
+
+  document.getElementById('back-btn').addEventListener('click', () => {
+    document.getElementById('detail-page').classList.remove('visible');
+  });
+
+  document.getElementById('compare-go-btn').addEventListener('click', openComparePage);
+
+  function buildShareText(a, b) {
+    const allKeys = Array.from(new Set([...Object.keys(a.specs), ...Object.keys(b.specs)]));
+    const line = (label, va, vb) => `${label}\n  ${a.brand} ${a.model}: ${va || '—'}\n  ${b.brand} ${b.model}: ${vb || '—'}`;
+    const rows = allKeys.map(k => line(k, a.specs[k], b.specs[k])).join('\n\n');
+    const pa = a.price ? `£${a.price.toFixed(2)}` : 'POA';
+    const pb = b.price ? `£${b.price.toFixed(2)}` : 'POA';
+    return `RSPB Conwy — Product Comparison\n${'='.repeat(35)}\n\n` +
+      `${a.brand} ${a.model} (${pa})\nvs\n${b.brand} ${b.model} (${pb})\n\n` +
+      `${'─'.repeat(35)}\n\n${rows}\n\n${'─'.repeat(35)}\n` +
+      `RSPB Conwy Nature Reserve Shop\nconwy@rspb.org.uk`;
+  }
+
+  async function shareComparison() {
+    const [a, b] = compareList.map(id => products.find(x => x.id === id));
+    if (!a || !b) return;
+    const text = buildShareText(a, b);
+    const title = `${a.brand} ${a.model} vs ${b.brand} ${b.model}`;
+    const subject = encodeURIComponent(title);
+    const body = encodeURIComponent(text);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  }
+
+  document.getElementById('compare-back-btn').addEventListener('click', () => {
+    document.getElementById('compare-page').classList.remove('visible');
+  });
+
+  document.getElementById('compare-share-btn').addEventListener('click', shareComparison);
+
+  loadProducts();
+</script>
+</body>
+</html>
